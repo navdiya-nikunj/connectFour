@@ -4,24 +4,24 @@
   "miniapp":{
     "version": "1",
     "name": "Connect Four",
-    "iconUrl": "https://rewards.warpcast.com/app.png",
-    "splashImageUrl": "https://rewards.warpcast.com/logo.png",
+    "iconUrl": "https://connect-four-hazel.vercel.app/logo.png",
+    "splashImageUrl": "https://connect-four-hazel.vercel.app/logo.png",
     "splashBackgroundColor": "#000000",
-    "homeUrl": "https://rewards.warpcast.com",
+    "homeUrl": "https://connect-four-hazel.vercel.app",
     "webhookUrl": "",
     "subtitle": "Connect four game",
     "description": "Play Connect Four with your Farcaster friends! Classic gameplay with social features and tournaments.",
     "screenshotUrls": [
-      "https://rewards.warpcast.com/screenshot1.png",
-      "https://rewards.warpcast.com/screenshot2.png",
-      "https://rewards.warpcast.com/screenshot3.png"
+      "https://connect-four-hazel.vercel.app/preview.png",
+      "https://connect-four-hazel.vercel.app/preview.png",
+      "https://connect-four-hazel.vercel.app/preview.png"
     ],
     "primaryCategory": "game",
     "tags": ["connect-four", "board-game", "multiplayer", "social-gaming"],
-    "heroImageUrl": "https://rewards.warpcast.com/og.png",
+    "heroImageUrl": "https://connect-four-hazel.vercel.app/preview.png",
     "tagline": "Connect four for farcaster",
     "ogTitle": "connect four",
     "ogDescription": "Play Connect Four with on Farcaster with friends!",
-    "ogImageUrl": "https://rewards.warpcast.com/og.png"
+    "ogImageUrl": "https://connect-four-hazel.vercel.app/preview.png"
   }
 }

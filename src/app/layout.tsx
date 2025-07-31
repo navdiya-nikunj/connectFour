@@ -9,26 +9,31 @@ export const metadata: Metadata = {
   viewport: "width=device-width, initial-scale=1",
   other: {
     "fc:miniapp": JSON.stringify({
-      version: "1",
-      imageUrl: "https://connectfour.miniapps.farcaster.xyz/logo.png",
+      version: "next",
+      imageUrl: "https://connect-four-hazel.vercel.app/logo.png",
       button: {
-        title: "Connect Four",
+        title: "Connect Four 🎮",
         action: {
-          url: "https://connectfour.miniapps.farcaster.xyz",
-          method: "GET"
+          type: "launch_frame",
+          name: "Connect Four",
+          url: "https://connect-four-hazel.vercel.app",
+          splashImageUrl: "https://connect-four-hazel.vercel.app/logo.png",
         }
       }
     }),
     "fc:frame": JSON.stringify({
-      version: "1",
-      imageUrl: "https://connectfour.miniapps.farcaster.xyz/logo.png",
+      version: "next",
+      imageUrl: "https://connect-four-hazel.vercel.app/logo.png",
       button: {
-        title: "Connect Four",
+        title: "Connect Four 🎮",
         action: {
-          url: "https://connectfour.miniapps.farcaster.xyz",
-          method: "GET"
+          type: "launch_frame",
+          name: "Connect Four",
+          url: "https://connect-four-hazel.vercel.app",
+          splashImageUrl: "https://connect-four-hazel.vercel.app/logo.png",
         }
-      }
+      },
+      action: "launch"
     })
   }
 };
