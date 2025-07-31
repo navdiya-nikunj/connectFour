@@ -1,5 +1,5 @@
 import { GameState, Player } from '@/types/game';
-import { isValidMove, getLowestEmptyRow, checkWin, checkDraw } from './gameLogic';
+import { isValidMove, getLowestEmptyRow, checkWin } from './gameLogic';
 
 export type AIDifficulty = 'easy' | 'medium' | 'hard';
 

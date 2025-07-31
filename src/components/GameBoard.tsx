@@ -109,7 +109,7 @@ export default function GameBoard({ gameState, onGameStateChange, disabled = fal
         {gameState.gameStatus === 'draw' && (
           <div className="text-center">
             <div className="bg-gray-50 rounded-lg px-6 py-3 shadow-lg border border-gray-200">
-              <span className="text-xl font-bold text-gray-700">It's a draw!</span>
+              <span className="text-xl font-bold text-gray-700">It&apos;s a draw!</span>
             </div>
           </div>
         )}

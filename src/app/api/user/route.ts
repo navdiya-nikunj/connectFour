@@ -4,6 +4,7 @@ export async function GET(request: NextRequest) {
   try {
     // In a real implementation, you would validate the JWT token here
     // For now, we'll return a mock user response
+    console.log(request);
     const mockUser = {
       fid: 12345,
       username: 'connectfour_player',

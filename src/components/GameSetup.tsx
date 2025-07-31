@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Users, Bot, Trophy, Settings, Play } from 'lucide-react';
-import FarcasterAuth from './FarcasterAuth';
 import { AIDifficulty } from '@/utils/aiLogic';
 
 interface GameSetupProps {
@@ -14,7 +13,7 @@ interface GameSetupProps {
 export default function GameSetup({ onBack, onStartGame }: GameSetupProps) {
   const [selectedMode, setSelectedMode] = useState<'local' | 'ai' | 'multiplayer'>('local');
   const [aiDifficulty, setAiDifficulty] = useState<AIDifficulty>('medium');
-  const [farcasterUser, setFarcasterUser] = useState<any>(null);
+
 
   const gameModes = [
     {

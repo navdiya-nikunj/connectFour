@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { RotateCcw, Trophy, Users, Bot } from 'lucide-react';
 import GameBoard from './GameBoard';
-import FarcasterAuth from './FarcasterAuth';
+
 import { GameState } from '@/types/game';
 import { getInitialGameState, resetGame, updateGameState } from '@/utils/gameLogic';
 import { getAIMove, AIDifficulty } from '@/utils/aiLogic';
@@ -14,7 +14,6 @@ export default function GameContainer() {
   const [gameMode, setGameMode] = useState<'local' | 'ai' | 'multiplayer'>('local');
   const [aiDifficulty, setAiDifficulty] = useState<AIDifficulty>('medium');
   const [isAITurn, setIsAITurn] = useState(false);
-  const [farcasterUser, setFarcasterUser] = useState<any>(null);
 
   const handleGameStateChange = (newState: GameState) => {
     setGameState(newState);

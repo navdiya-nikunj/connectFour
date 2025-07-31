@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GameState } from '@/types/game';
 import { updateGameState, getInitialGameState } from '@/utils/gameLogic';
 
 export async function POST(request: NextRequest) {

@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { RotateCcw, Trophy, ArrowLeft, Home, Share } from 'lucide-react';
-import { sdk } from '@farcaster/miniapp-sdk';
 import GameBoard from './GameBoard';
 import { GameState } from '@/types/game';
 import { getInitialGameState, resetGame, updateGameState } from '@/utils/gameLogic';

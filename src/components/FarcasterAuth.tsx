@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { User, LogOut } from 'lucide-react';
 import { sdk } from '@farcaster/miniapp-sdk';
+import Image from 'next/image';
 
 interface FarcasterUser {
   fid: number;
@@ -51,6 +52,7 @@ export default function FarcasterAuth({ onUserChange }: FarcasterAuthProps) {
     try {
       // Get Quick Auth token
       const { token } = await sdk.quickAuth.getToken();
+      console.log(token);
       
       // Fetch user data from your backend
       const response = await sdk.quickAuth.fetch('/api/user');
@@ -91,7 +93,7 @@ export default function FarcasterAuth({ onUserChange }: FarcasterAuthProps) {
       >
         <div className="flex items-center space-x-2">
           {user.avatar && (
-            <img
+            <Image
               src={user.avatar}
               alt={user.displayName || `User ${user.fid}`}
               className="w-8 h-8 rounded-full"
