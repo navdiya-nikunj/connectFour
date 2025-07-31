@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   other: {
     "fc:miniapp": JSON.stringify({
       version: "next",
-      imageUrl: "https://connect-four-hazel.vercel.app/logo.png",
+      imageUrl: "https://connect-four-hazel.vercel.app/preview.png",
       button: {
         title: "Connect Four 🎮",
         action: {
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     }),
     "fc:frame": JSON.stringify({
       version: "next",
-      imageUrl: "https://connect-four-hazel.vercel.app/logo.png",
+      imageUrl: "https://connect-four-hazel.vercel.app/preview.png",
       button: {
         title: "Connect Four 🎮",
         action: {
