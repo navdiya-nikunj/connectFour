@@ -8,7 +8,6 @@
     "splashImageUrl": "https://connect-four-hazel.vercel.app/logo.png",
     "splashBackgroundColor": "#000000",
     "homeUrl": "https://connect-four-hazel.vercel.app",
-    "webhookUrl": "",
     "subtitle": "Connect four game",
     "description": "Play Connect Four with your Farcaster friends! Classic gameplay with social features and tournaments.",
     "screenshotUrls": [
@@ -16,7 +15,7 @@
       "https://connect-four-hazel.vercel.app/preview.png",
       "https://connect-four-hazel.vercel.app/preview.png"
     ],
-    "primaryCategory": "game",
+    "primaryCategory": "games",
     "tags": ["connect-four", "board-game", "multiplayer", "social-gaming"],
     "heroImageUrl": "https://connect-four-hazel.vercel.app/preview.png",
     "tagline": "Connect four for farcaster",

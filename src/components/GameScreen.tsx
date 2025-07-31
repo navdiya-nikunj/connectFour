@@ -86,51 +86,51 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4 px-2">
+      <div className="max-w-sm mx-auto">
+        {/* Compact Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between mb-8"
+          className="flex items-center justify-between mb-4"
         >
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             <button
               onClick={onBackToSetup}
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
+              className="flex items-center space-x-1 text-gray-600 hover:text-gray-800 transition-colors text-sm"
             >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back to Setup</span>
+              <ArrowLeft className="w-4 h-4" />
+              <span className="hidden sm:inline">Back</span>
             </button>
             <button
               onClick={onBackToHome}
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
+              className="flex items-center space-x-1 text-gray-600 hover:text-gray-800 transition-colors text-sm"
             >
-              <Home className="w-5 h-5" />
-              <span>Home</span>
+              <Home className="w-4 h-4" />
+              <span className="hidden sm:inline">Home</span>
             </button>
           </div>
-          <h1 className="text-3xl font-bold text-gray-800">Connect Four</h1>
-          <div className="w-32"></div> {/* Spacer for centering */}
+          <h1 className="text-xl font-bold text-gray-800">Connect Four</h1>
+          <div className="w-16"></div> {/* Smaller spacer */}
         </motion.div>
 
-        {/* Game Mode Indicator */}
+        {/* Compact Game Mode Indicator */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex justify-center mb-6"
+          className="flex justify-center mb-4"
         >
-          <div className={`rounded-lg px-4 py-2 border ${
+          <div className={`rounded-lg px-3 py-1 border text-xs ${
             gameState.gameStatus === 'playing'
               ? 'bg-yellow-50 border-yellow-200'
               : 'bg-blue-50 border-blue-200'
           }`}>
-            <span className={`text-sm font-medium ${
+            <span className={`font-medium ${
               gameState.gameStatus === 'playing'
                 ? 'text-yellow-800'
                 : 'text-blue-800'
             }`}>
-              {gameState.gameStatus === 'playing' ? '🎮 Game in Progress' : `Mode: ${getGameModeLabel(gameMode)}`}
+              {gameState.gameStatus === 'playing' ? '🎮 Playing' : `${getGameModeLabel(gameMode)}`}
               {gameMode === 'ai' && gameState.gameStatus !== 'playing' && ` (${aiDifficulty})`}
             </span>
           </div>
@@ -140,7 +140,7 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex justify-center mb-8"
+          className="flex justify-center mb-4"
         >
           <GameBoard
             gameState={gameState}
@@ -150,68 +150,68 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
           />
         </motion.div>
 
-        {/* Game Controls */}
+        {/* Compact Game Controls - Stacked vertically */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex justify-center space-x-4"
+          className="flex flex-col space-y-2 mb-4"
         >
           <button
             onClick={handleResetGame}
             disabled={gameState.gameStatus === 'playing'}
-            className={`flex items-center space-x-2 px-6 py-3 rounded-lg shadow-lg transition-all ${
+            className={`flex items-center justify-center space-x-2 px-4 py-2 rounded-lg shadow-md transition-all text-sm ${
               gameState.gameStatus === 'playing'
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-white text-gray-700 hover:shadow-xl hover:bg-gray-50'
+                : 'bg-white text-gray-700 hover:shadow-lg hover:bg-gray-50'
             }`}
           >
-            <RotateCcw className="w-5 h-5" />
+            <RotateCcw className="w-4 h-4" />
             <span>Reset Game</span>
           </button>
           
           <button
             onClick={handleNewGame}
             disabled={gameState.gameStatus === 'playing'}
-            className={`flex items-center space-x-2 px-6 py-3 rounded-lg shadow-lg transition-all ${
+            className={`flex items-center justify-center space-x-2 px-4 py-2 rounded-lg shadow-md transition-all text-sm ${
               gameState.gameStatus === 'playing'
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-blue-500 text-white hover:shadow-xl hover:bg-blue-600'
+                : 'bg-blue-500 text-white hover:shadow-lg hover:bg-blue-600'
             }`}
           >
-            <Trophy className="w-5 h-5" />
+            <Trophy className="w-4 h-4" />
             <span>New Game</span>
           </button>
           
           <button
             onClick={handleShareResult}
-            className="flex items-center space-x-2 px-6 py-3 rounded-lg shadow-lg transition-all bg-purple-500 text-white hover:shadow-xl hover:bg-purple-600"
+            className="flex items-center justify-center space-x-2 px-4 py-2 rounded-lg shadow-md transition-all bg-purple-500 text-white hover:shadow-lg hover:bg-purple-600 text-sm"
           >
-            <Share className="w-5 h-5" />
+            <Share className="w-4 h-4" />
             <span>Share Result</span>
           </button>
         </motion.div>
 
-        {/* Game Statistics */}
+        {/* Compact Game Statistics */}
         {gameState.gameStatus !== 'playing' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-8 text-center"
+            className="text-center"
           >
-            <div className="bg-white rounded-lg p-6 shadow-lg max-w-md mx-auto border border-gray-200">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">Game Summary</h3>
-              <div className="space-y-3">
+            <div className="bg-white rounded-lg p-4 shadow-md border border-gray-200">
+              <h3 className="text-base font-semibold mb-3 text-gray-800">Game Summary</h3>
+              <div className="space-y-2">
                 <div className="flex items-center justify-center space-x-2">
                   <div className={`w-3 h-3 rounded-full ${gameState.winner === 'red' ? 'bg-red-500' : gameState.winner === 'yellow' ? 'bg-yellow-500' : 'bg-gray-400'}`} />
-                  <p className="text-gray-700 font-medium">
+                  <p className="text-gray-700 font-medium text-sm">
                     {gameState.gameStatus === 'won' 
                       ? `${gameState.winner === 'red' ? 'Red' : 'Yellow'} player won!`
                       : 'The game ended in a draw!'
                     }
                   </p>
                 </div>
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <p className="text-sm text-gray-600">
+                <div className="bg-gray-50 rounded-lg p-2">
+                  <p className="text-xs text-gray-600">
                     Total moves: <span className="font-semibold text-gray-800">{gameState.board.flat().filter(cell => cell !== null).length}</span>
                   </p>
                 </div>
@@ -220,18 +220,18 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
           </motion.div>
         )}
 
-        {/* Coming Soon Notice */}
+        {/* Compact Coming Soon Notice */}
         {gameMode === 'multiplayer' && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="mt-8 text-center"
+            className="mt-4 text-center"
           >
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 max-w-md mx-auto">
-              <p className="text-yellow-800 font-medium">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+              <p className="text-yellow-800 font-medium text-sm">
                 🚧 Multiplayer coming soon! 🚧
               </p>
-              <p className="text-yellow-600 text-sm mt-1">
+              <p className="text-yellow-600 text-xs mt-1">
                 Farcaster integration and real-time multiplayer will be available in the next update.
               </p>
             </div>
