@@ -57,6 +57,9 @@ export function checkWin(board: Player[][], row: number, col: number, player: Pl
     const winningCells: [number, number][] = [];
     let count = 1;
     
+    // Add the current cell first
+    winningCells.push([row, col]);
+    
     // Check in positive direction
     for (let i = 1; i < 4; i++) {
       const newRow = row + i * dx;
@@ -92,7 +95,6 @@ export function checkWin(board: Player[][], row: number, col: number, player: Pl
     }
     
     if (count >= 4) {
-      winningCells.push([row, col]);
       return [true, winningCells];
     }
   }

@@ -1,6 +1,12 @@
 
 
 {
+  "accountAssociation": {
+    "header": "eyJmaWQiOjM3NjEwNiwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDc3MjdDZDgwMTE4N2UzMjVEYjM0MkZGODJBM0QyNkI5OGUxNDE5QUQifQ",
+    "payload": "eyJkb21haW4iOiJjb25uZWN0LWZvdXItaGF6ZWwudmVyY2VsLmFwcCJ9",
+    "signature": "MHhiMTUxOTcxODRjN2EwMmFlOGE2Njc1YmUzMTZhYzNkZjM2MmNiMjEzMDU2NzQyNDcxZjM2NmFhNGExZDkyODNiMTgxZWJkZDZkZmYyMTBmMmY5ZjNjMzA3ZjY2NDI5ODQ2Mzg5ZTg4YmJjNDZiZDhkZDY3NDI3MTgyNzEzNTIzZjFi"
+  }
+,
   "miniapp":{
     "version": "1",
     "name": "Connect Four",

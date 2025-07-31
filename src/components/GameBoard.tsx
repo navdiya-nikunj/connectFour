@@ -44,7 +44,7 @@ export default function GameBoard({ gameState, onGameStateChange, disabled = fal
         key={`${row}-${col}`}
         className={`w-7 h-7 rounded-full border-2 border-gray-300 shadow-lg ${
           player === 'red' ? 'bg-red-500' : 'bg-yellow-500'
-        } ${isWinning ? 'ring-2 ring-green-400 ring-opacity-75' : ''}`}
+        } ${isWinning ? 'ring-4 ring-green-500 ring-opacity-100 animate-pulse' : ''}`}
         initial={{ scale: 0, y: -30 }}
         animate={{ 
           scale: 1, 
