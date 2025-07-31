@@ -1,0 +1,27 @@
+
+
+{
+  "miniapp":{
+    "version": "1",
+    "name": "Connect Four",
+    "iconUrl": "https://rewards.warpcast.com/app.png",
+    "splashImageUrl": "https://rewards.warpcast.com/logo.png",
+    "splashBackgroundColor": "#000000",
+    "homeUrl": "https://rewards.warpcast.com",
+    "webhookUrl": "",
+    "subtitle": "Connect four game",
+    "description": "Play Connect Four with your Farcaster friends! Classic gameplay with social features and tournaments.",
+    "screenshotUrls": [
+      "https://rewards.warpcast.com/screenshot1.png",
+      "https://rewards.warpcast.com/screenshot2.png",
+      "https://rewards.warpcast.com/screenshot3.png"
+    ],
+    "primaryCategory": "game",
+    "tags": ["connect-four", "board-game", "multiplayer", "social-gaming"],
+    "heroImageUrl": "https://rewards.warpcast.com/og.png",
+    "tagline": "Connect four for farcaster",
+    "ogTitle": "connect four",
+    "ogDescription": "Play Connect Four with on Farcaster with friends!",
+    "ogImageUrl": "https://rewards.warpcast.com/og.png"
+  }
+}
