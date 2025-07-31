@@ -4,12 +4,14 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Play, Users, Bot, Trophy, ArrowRight, Share } from 'lucide-react';
 import Image from 'next/image';
+import sdk from '@farcaster/miniapp-sdk';
 
 interface LandingPageProps {
   onStartGame: () => void;
 }
 
 export default function LandingPage({ onStartGame }: LandingPageProps) {
+  
   const features = [
     {
       icon: <Users className="w-6 h-6" />,
@@ -29,14 +31,17 @@ export default function LandingPage({ onStartGame }: LandingPageProps) {
   ];
 
   const handleShare = () => {
-    const gameUrl = window.location.href;
+    const gameUrl = window.location.href || 'https://connect-four-hazel.vercel.app';
     const castText = `🎮 Just played Connect Four on Farcaster! Check it out: ${gameUrl}`;
     
-    // Create Farcaster cast URL with embeddings
-    const farcasterUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds=${encodeURIComponent(gameUrl)}`;
-    
-    // Open in new tab
-    window.open(farcasterUrl, '_blank');
+    sdk.actions.composeCast({
+      text: castText,
+      embeds: [gameUrl] 
+    });
+  };
+
+  const handleAddMiniApp = () => {
+    sdk.actions.addMiniApp();
   };
 
   return (
@@ -89,6 +94,14 @@ export default function LandingPage({ onStartGame }: LandingPageProps) {
           >
             <Share className="w-6 h-6" />
             <span>Share on Farcaster</span>
+          </button>
+
+          <button
+            onClick={handleAddMiniApp}
+            className="group bg-purple-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-purple-600 transition-all hover:shadow-xl flex items-center space-x-2"
+          >
+            <Share className="w-6 h-6" />
+            <span>Add MiniApp</span>
           </button>
         </motion.div>
 

@@ -7,6 +7,7 @@ import GameBoard from './GameBoard';
 import { GameState } from '@/types/game';
 import { getInitialGameState, resetGame, updateGameState } from '@/utils/gameLogic';
 import { getAIMove, AIDifficulty } from '@/utils/aiLogic';
+import sdk from '@farcaster/miniapp-sdk';
 
 interface GameScreenProps {
   gameMode: 'local' | 'ai' | 'multiplayer';
@@ -39,7 +40,7 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
   };
 
   const handleShareResult = () => {
-    const gameUrl = window.location.href;
+    const gameUrl = window.location.href || 'https://connect-four-hazel.vercel.app';
     let castText = '';
     
     if (gameState.gameStatus === 'won') {
@@ -50,12 +51,11 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
     } else {
       castText = `🎮 Playing Connect Four on Farcaster! Join the fun! 🎯\n\nPlay now: ${gameUrl}`;
     }
+    sdk.actions.composeCast({
+      text: castText,
+      embeds: [gameUrl] 
+    });
     
-    // Create Farcaster cast URL with embeddings
-    const farcasterUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds=${encodeURIComponent(gameUrl)}`;
-    
-    // Open in new tab
-    window.open(farcasterUrl, '_blank');
   };
 
   // AI move effect
