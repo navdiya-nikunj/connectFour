@@ -30,6 +30,7 @@ export default function FarcasterAuth({ onUserChange, currentUser }: FarcasterAu
         if (currentUser) {
           setUser(currentUser);
           onUserChange(currentUser);
+          setIsLoading(false);
           return;
         }
         const token = sdk.quickAuth.token;
@@ -46,8 +47,6 @@ export default function FarcasterAuth({ onUserChange, currentUser }: FarcasterAu
         console.error('Error checking auth status:', error);
       } finally {
         setIsLoading(false);
-        // Tell the SDK that the app is ready to display
-        await sdk.actions.ready();
       }
     };
 
