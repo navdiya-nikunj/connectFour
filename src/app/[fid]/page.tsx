@@ -1,13 +1,13 @@
 import { Metadata } from 'next';
 
 type PageProps = {
-  params: {
+  params: Promise<{
     fid: string;
-  };
+  }>;
 };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { fid } = params;
+  const { fid } = await params;
   return {
     title: `Details for FID: ${fid}`,
     description: `This page shows details for the FID route: ${fid}.`,
@@ -43,8 +43,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default function FidPage({ params }: PageProps) {
-  const { fid } = params;
+export default async function FidPage({ params }: PageProps) {
+  const { fid } = await params;
   return (
     <main>
       <h1>FID Route Details</h1>
