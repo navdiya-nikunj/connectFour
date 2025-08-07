@@ -17,11 +17,10 @@ export async function GET(request: NextRequest) {
     // Check if user exists in database
     let user = await getUserByFid(authenticatedUser.fid);
     
-    console.log('user', user);
     if (!user) {
       // Fetch user data from Farcaster API
       const farcasterUser = await fetchFarcasterUser(authenticatedUser.fid);
-      console.log('farcasterUser', farcasterUser);
+      
       // Create new user in database
       user = await createOrUpdateUser({
         fid: authenticatedUser.fid,
@@ -60,7 +59,7 @@ async function fetchFarcasterUser(fid: number) {
         'api_key': NEYNAR_API_KEY || '',
       },
     });
-    console.log('response', response);
+    
     if (response.ok) {
       const data = await response.json() as {
         users: Array<{
@@ -72,7 +71,7 @@ async function fetchFarcasterUser(fid: number) {
       };
 
       const user = data.users && data.users[0];
-      console.log('user', user);
+   
       if (user) {
         return {
           username: user.username,

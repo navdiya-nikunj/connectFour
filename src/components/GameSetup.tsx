@@ -30,13 +30,13 @@ export default function GameSetup({ onBack, onStartGame }: GameSetupProps) {
       icon: <Bot className="w-8 h-8" />,
       color: 'bg-blue-500'
     },
-    {
-      id: 'multiplayer' as const,
-      title: 'Online Multiplayer',
-      description: 'Play with Farcaster friends (coming soon)',
-      icon: <Trophy className="w-8 h-8" />,
-      color: 'bg-purple-500'
-    }
+    // {
+    //   id: 'multiplayer' as const,
+    //   title: 'Online Multiplayer',
+    //   description: 'Play with Farcaster friends (coming soon)',
+    //   icon: <Trophy className="w-8 h-8" />,
+    //   color: 'bg-purple-500'
+    // }
   ];
 
   const handleStartGame = () => {
@@ -57,7 +57,7 @@ export default function GameSetup({ onBack, onStartGame }: GameSetupProps) {
             className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
-            <span>Back to Home</span>
+            
           </button>
           <h1 className="text-3xl font-bold text-gray-800">Game Setup</h1>
           <div className="w-20"></div> {/* Spacer for centering */}

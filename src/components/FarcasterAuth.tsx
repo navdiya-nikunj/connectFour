@@ -15,10 +15,11 @@ interface FarcasterUser {
 
 interface FarcasterAuthProps {
   onUserChange: (user: FarcasterUser | null) => void;
+  currentUser: FarcasterUser | null;
 }
 
-export default function FarcasterAuth({ onUserChange }: FarcasterAuthProps) {
-  const [user, setUser] = useState<FarcasterUser | null>(null);
+export default function FarcasterAuth({ onUserChange, currentUser }: FarcasterAuthProps) {
+  const [user, setUser] = useState<FarcasterUser | null>(currentUser);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -26,6 +27,11 @@ export default function FarcasterAuth({ onUserChange }: FarcasterAuthProps) {
     // Check if user is already authenticated
     const checkAuth = async () => {
       try {
+        if (currentUser) {
+          setUser(currentUser);
+          onUserChange(currentUser);
+          return;
+        }
         const token = sdk.quickAuth.token;
         if (token) {
           // User is already authenticated
@@ -46,7 +52,7 @@ export default function FarcasterAuth({ onUserChange }: FarcasterAuthProps) {
     };
 
     checkAuth();
-  }, [onUserChange]);
+  }, []);
 
   const handleConnect = async () => {
     setIsConnecting(true);
@@ -118,7 +124,6 @@ export default function FarcasterAuth({ onUserChange }: FarcasterAuthProps) {
           className="flex items-center space-x-1 text-red-600 hover:text-red-700 transition-colors"
         >
           <LogOut className="w-4 h-4" />
-          <span className="text-sm">Disconnect</span>
         </button>
       </motion.div>
     );

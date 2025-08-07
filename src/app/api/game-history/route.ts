@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { validateQuickAuthToken } from '@/utils/auth';
-import { saveGameHistory, getGameHistoryByUser, IGameHistory } from '@/utils/mongodb';
+import { saveGameHistory, getGameHistoryByUser, IGameHistory, updateStreakAfterGame } from '@/utils/mongodb';
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,6 +34,23 @@ export async function POST(request: NextRequest) {
       moves,
       duration,
     });
+
+    // Update streaks for both players
+    const redPlayerFid = players.red.fid;
+    const yellowPlayerFid = players.yellow.fid;
+    
+    // Determine if each player won
+    const redPlayerWon = winner === 'red';
+    const yellowPlayerWon = winner === 'yellow';
+    
+    // Update streaks (only for actual players, not AI)
+    if (gameMode !== 'ai' || redPlayerFid !== 0) {
+      await updateStreakAfterGame(redPlayerFid, redPlayerWon);
+    }
+    
+    if (gameMode !== 'ai' || yellowPlayerFid !== 0) {
+      await updateStreakAfterGame(yellowPlayerFid, yellowPlayerWon);
+    }
 
     return NextResponse.json({ gameHistory });
   } catch (error) {

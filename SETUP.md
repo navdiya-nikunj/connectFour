@@ -1,206 +1,236 @@
-# Connect Four Mini App Setup Guide
+# Connect Four Farcaster Mini App - Setup Guide
 
-This guide will help you set up the Connect Four mini app with Farcaster authentication and MongoDB integration.
+## 🚀 Quick Start
 
-## Prerequisites
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd connect-for
+   ```
 
-1. **Node.js 22.11.0 or higher** (LTS version recommended)
-2. **MongoDB Atlas account** or local MongoDB instance
-3. **Farcaster account** for testing
-
-## Installation
-
-1. **Install dependencies:**
+2. **Install dependencies**
    ```bash
    npm install
    ```
 
-2. **Set up environment variables:**
-   ```bash
-   cp .env.local.example .env.local
-   ```
-   
-   Edit `.env.local` and add your MongoDB connection string:
-   ```
-   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/connect-four?retryWrites=true&w=majority
+3. **Set up environment variables**
+   Create a `.env.local` file with:
+   ```env
+   MONGODB_URI=your_mongodb_connection_string
+   NEYNAR_API_KEY=your_neynar_api_key
    HOSTNAME=localhost:3000
    ```
 
-3. **Test database connection:**
-   ```bash
-   npm run setup-db
-   ```
-   
-   This will verify your MongoDB connection and show database information.
-
-## MongoDB Setup
-
-### Option 1: MongoDB Atlas (Recommended)
-
-1. Go to [MongoDB Atlas](https://www.mongodb.com/atlas)
-2. Create a free cluster
-3. Create a database user with read/write permissions
-4. Get your connection string and add it to `.env.local`
-
-### Option 2: Local MongoDB
-
-1. Install MongoDB locally
-2. Start MongoDB service
-3. Use connection string: `mongodb://localhost:27017/connect-four`
-
-## Farcaster Developer Mode
-
-1. Make sure you're logged in to Farcaster on mobile or desktop
-2. Visit: https://farcaster.xyz/~/settings/developer-tools
-3. Toggle on "Developer Mode"
-4. A developer section will appear on the left side of your desktop display
-
-## Running the App
-
-1. **Start the development server:**
+4. **Run the development server**
    ```bash
    npm run dev
    ```
 
-2. **Open the app in your browser:**
-   - Navigate to `http://localhost:3000`
-   - The app will show a loading screen until you call `sdk.actions.ready()`
+5. **Open your browser**
+   Navigate to `http://localhost:3000`
 
-## Features
+## 📊 Streak System Features
 
-### Database & ORM
-- **Mongoose Integration:** Uses Mongoose ODM for MongoDB with schema validation
-- **Type Safety:** Full TypeScript support with Mongoose schemas and interfaces
-- **Connection Management:** Optimized database connections with connection pooling
-- **Schema Validation:** Automatic data validation and type checking
+### 24-Hour Streak Logic
+The streak system implements a 24-hour period tracking:
 
-### Authentication
-- **Quick Auth Integration:** Uses Farcaster's Quick Auth for seamless authentication
-- **User Management:** Automatically creates/updates user profiles in MongoDB
-- **Token Validation:** Secure JWT validation on the server side
+- **Streak Continuation**: If a user wins within 24 hours of their last win, the streak continues
+- **Streak Reset**: If more than 24 hours pass since the last win, a new streak starts at 1
+- **Loss Handling**: Losses don't immediately reset streaks - they only reset if 24 hours pass without a win
+- **Automatic Cleanup**: Expired streaks are automatically reset when users view their streak data
 
-### Game Features
-- **Local 2-Player Mode:** Play against a friend on the same device
-- **AI Mode:** Play against AI with three difficulty levels (Easy, Medium, Hard)
-- **Game History:** All games are saved to MongoDB with detailed move tracking
-- **Share Results:** Share game results on Farcaster with embedded links
+### Streak Tracking
+- **Current Streak**: Number of consecutive wins within 24-hour periods
+- **Longest Streak**: Highest streak achieved (never resets)
+- **Total Wins**: Total number of games won
+- **Total Games**: Total number of games played
+- **Win Rate**: Percentage of games won
+- **Last Win Date**: Timestamp of the most recent win
+- **Streak Start Date**: When the current streak began
 
 ### Database Collections
 
-The app uses Mongoose schemas to create two main collections in MongoDB:
+#### `users`
+Stores Farcaster user information:
+```javascript
+{
+  fid: Number,           // Farcaster ID
+  username: String,      // Farcaster username
+  displayName: String,   // Display name
+  avatar: String,        // Profile picture URL
+  primaryAddress: String, // Wallet address
+  createdAt: Date,
+  updatedAt: Date
+}
+```
 
-1. **`users`** - Stores Farcaster user profiles
-   - `fid`: Farcaster ID (Number, required, unique)
-   - `username`: Farcaster username (String)
-   - `displayName`: User's display name (String)
-   - `avatar`: Profile picture URL (String)
-   - `primaryAddress`: User's primary Ethereum address (String)
-   - `createdAt`: Account creation timestamp (auto-generated)
-   - `updatedAt`: Last update timestamp (auto-generated)
+#### `gamehistory`
+Stores completed game data:
+```javascript
+{
+  gameMode: String,      // 'local', 'ai', 'multiplayer'
+  aiDifficulty: String,  // 'easy', 'medium', 'hard' (for AI games)
+  winner: String,        // 'red', 'yellow', 'draw'
+  players: {
+    red: { fid, username, displayName, avatar },
+    yellow: { fid, username, displayName, avatar }
+  },
+  moves: Array,          // Game moves with timestamps
+  duration: Number,      // Game duration in seconds
+  createdAt: Date,
+  updatedAt: Date
+}
+```
 
-2. **`gamehistories`** - Stores completed games
-   - `_id`: Unique game ID (auto-generated)
-   - `gameMode`: 'local' | 'ai' | 'multiplayer' (required)
-   - `aiDifficulty`: AI difficulty level - 'easy' | 'medium' | 'hard' (optional)
-   - `winner`: 'red' | 'yellow' | 'draw' (required)
-   - `players`: Object with red and yellow player info
-     - `red.fid`: Red player's FID (Number, required)
-     - `red.username`: Red player's username (String)
-     - `red.displayName`: Red player's display name (String)
-     - `red.avatar`: Red player's avatar (String)
-     - `yellow.fid`: Yellow player's FID (Number, required)
-     - `yellow.username`: Yellow player's username (String)
-     - `yellow.displayName`: Yellow player's display name (String)
-     - `yellow.avatar`: Yellow player's avatar (String)
-   - `moves`: Array of all moves with timestamps
-     - `column`: Column number (Number, required)
-     - `player`: 'red' | 'yellow' (required)
-     - `timestamp`: Move timestamp (Date, auto-generated)
-   - `duration`: Game duration in milliseconds (Number, required)
-   - `createdAt`: Game completion timestamp (auto-generated)
-   - `updatedAt`: Last update timestamp (auto-generated)
+#### `userstreaks`
+Stores user streak data:
+```javascript
+{
+  fid: Number,           // Farcaster ID
+  currentStreak: Number, // Current 24-hour streak
+  longestStreak: Number, // Best streak ever achieved
+  totalWins: Number,     // Total games won
+  totalGames: Number,    // Total games played
+  lastWinDate: Date,     // Last win timestamp
+  streakStartDate: Date, // When current streak started
+  createdAt: Date,
+  updatedAt: Date
+}
+```
 
-## API Endpoints
+## 🔌 API Endpoints
 
-### `/api/user` (GET)
-- **Authentication:** Required (Quick Auth token)
-- **Response:** User profile data
-- **Purpose:** Get or create user profile
+### `/api/user`
+- **GET**: Fetch authenticated user data
+- **Authentication**: Required (Quick Auth token)
 
-### `/api/game-history` (POST)
-- **Authentication:** Required (Quick Auth token)
-- **Body:** Game history data
-- **Purpose:** Save completed game
+### `/api/game-history`
+- **POST**: Save completed game data
+- **GET**: Fetch user's game history
+- **Authentication**: Required (Quick Auth token)
 
-### `/api/game-history` (GET)
-- **Authentication:** Required (Quick Auth token)
-- **Query:** `limit` (optional, default: 10)
-- **Purpose:** Get user's game history
+### `/api/streak`
+- **GET**: Fetch user streak data or leaderboard
+  - `?action=leaderboard&limit=10`: Get top streaks
+  - `?action=cleanup`: Clean up expired streaks (admin)
+  - Default: Get current user's streak
+- **POST**: Update streak after game
+  - Body: `{ "isWin": boolean }`
+- **Authentication**: Required (Quick Auth token)
 
-### `/api/game` (POST)
-- **Body:** `{ gameState, column }`
-- **Purpose:** Make a move in the game
+## 🎮 Streak System Features
 
-### `/api/game` (GET)
-- **Purpose:** Get initial game state
+### Achievements & Milestones
+- **First Win**: Start your streak journey
+- **3-Day Streak**: Consistent daily wins
+- **7-Day Streak**: Weekly warrior
+- **14-Day Streak**: Fortnight fighter
+- **30-Day Streak**: Monthly master
+- **100-Day Streak**: Century champion
 
-### `/api/test-db` (GET)
-- **Purpose:** Test database connection status
-- **Response:** Database connection state and status
+### Tracking & Analytics
+- Real-time streak updates
+- Win rate calculations
+- Historical performance data
+- Streak duration tracking
+- Achievement progress
 
-## Development Tips
+### Shareable Frames
+- Custom streak sharing frames
+- Social media integration
+- Achievement celebration
+- Leaderboard highlights
 
-1. **Testing Authentication:**
-   - Use Farcaster's developer mode to test the mini app
-   - Check browser console for authentication logs
+### Leaderboard System
+- Top current streaks
+- Best historical streaks
+- Win rate rankings
+- Community competition
 
-2. **Database Debugging:**
-   - Use MongoDB Compass or Atlas dashboard to view data
-   - Check server logs for database connection issues
+## 🛠️ Development Tips
 
-3. **Environment Variables:**
-   - Never commit `.env.local` to version control
-   - Use different MongoDB databases for development/production
-
-## Deployment
-
-1. **Vercel (Recommended):**
+### Testing Streak Functionality
+1. **Manual Testing**:
    ```bash
-   npm run build
-   vercel --prod
+   # Test streak cleanup
+   curl -H "Authorization: Bearer YOUR_TOKEN" \
+        "http://localhost:3000/api/streak?action=cleanup"
+   
+   # Test user streak
+   curl -H "Authorization: Bearer YOUR_TOKEN" \
+        "http://localhost:3000/api/streak"
    ```
 
-2. **Environment Variables:**
-   - Add `MONGODB_URI` to your deployment environment
-   - Set `HOSTNAME` to your production domain
+2. **Database Testing**:
+   ```javascript
+   // Connect to MongoDB and test streak data
+   db.userstreaks.find({ fid: YOUR_FID })
+   ```
 
-3. **Farcaster Integration:**
-   - Update your app's domain in Farcaster settings
-   - Test authentication in production environment
+3. **Simulate 24-hour periods**:
+   - Play games and win
+   - Wait 24+ hours
+   - Check if streak resets
+   - Verify new streak starts at 1
 
-## Troubleshooting
+### Streak Testing Scenarios
+- **New User**: First win should start streak at 1
+- **Same Day Wins**: Multiple wins should increment streak
+- **Next Day Win**: Should continue streak if within 24 hours
+- **Expired Streak**: Should reset to 1 if >24 hours passed
+- **Loss Handling**: Losses shouldn't reset streak immediately
 
-### Common Issues
+## 🔧 Troubleshooting
 
-1. **"Please add your Mongo URI to .env.local"**
-   - Make sure `.env.local` exists and has `MONGODB_URI`
+### Streak Issues
+- **Streaks not updating**: Check if `updateStreakAfterGame` is called in game history API
+- **Expired streaks not resetting**: Verify `getUserStreak` includes expiration check
+- **Wrong streak counts**: Ensure 24-hour logic is working correctly
 
-2. **Authentication fails**
-   - Check that you're using Node.js 22.11.0+
-   - Verify Quick Auth server is accessible
-   - Check browser console for errors
+### Database Issues
+- **Connection errors**: Check MongoDB URI in environment variables
+- **Schema validation**: Ensure all required fields are present
+- **Index performance**: Add indexes for frequent queries
 
-3. **Database connection fails**
-   - Verify MongoDB URI is correct
-   - Check network connectivity
-   - Ensure database user has proper permissions
+### API Issues
+- **Authentication errors**: Verify Quick Auth token is valid
+- **CORS issues**: Check Next.js API configuration
+- **Rate limiting**: Monitor API usage patterns
 
-4. **App shows loading screen indefinitely**
-   - Make sure `sdk.actions.ready()` is called
-   - Check for JavaScript errors in console
+## 🚀 Production Deployment
 
-### Getting Help
+### Environment Variables
+```env
+MONGODB_URI=mongodb+srv://...
+NEYNAR_API_KEY=your_production_key
+HOSTNAME=your-domain.com
+NODE_ENV=production
+```
 
-- Check the [Farcaster Mini Apps documentation](https://miniapps.farcaster.xyz/)
-- Review [Quick Auth documentation](https://github.com/farcasterxyz/protocol/discussions/231)
-- Check MongoDB Atlas documentation for connection issues
+### Database Setup
+1. Create MongoDB Atlas cluster
+2. Set up database indexes for performance
+3. Configure backup and monitoring
+4. Set up connection pooling
+
+### Monitoring
+- Track streak system performance
+- Monitor API response times
+- Set up error alerting
+- Monitor database usage
+
+## 📈 Future Enhancements
+
+### Planned Features
+- **Streak Multipliers**: Bonus points for longer streaks
+- **Seasonal Events**: Special streak challenges
+- **Social Features**: Streak sharing and challenges
+- **Analytics Dashboard**: Detailed performance metrics
+- **Achievement Badges**: Visual streak milestones
+- **Push Notifications**: Streak reminders and alerts
+
+### Technical Improvements
+- **Caching**: Redis for streak data
+- **Background Jobs**: Automated streak cleanup
+- **Real-time Updates**: WebSocket for live streak changes
+- **Mobile Optimization**: Progressive Web App features

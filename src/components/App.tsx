@@ -6,15 +6,24 @@ import { sdk } from '@farcaster/miniapp-sdk';
 import LandingPage from './LandingPage';
 import GameSetup from './GameSetup';
 import GameScreen from './GameScreen';
+import StreakPage from './StreakPage';
 import { AIDifficulty } from '@/utils/aiLogic';
 
-type Screen = 'landing' | 'setup' | 'game';
+type Screen = 'landing' | 'setup' | 'game' | 'streaks';
+
+interface FarcasterUser {
+  fid: number;
+  username?: string;
+  displayName?: string;
+  avatar?: string;
+}
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('landing');
   const [gameMode, setGameMode] = useState<'local' | 'ai' | 'multiplayer'>('local');
   const [aiDifficulty, setAiDifficulty] = useState<AIDifficulty>('medium');
   const [isReady, setIsReady] = useState(false);
+  const [currentUser, setCurrentUser] = useState<FarcasterUser | null>(null);
 
   useEffect(() => {
     // Initialize the Mini App and hide the splash screen
@@ -50,10 +59,43 @@ export default function App() {
     setCurrentScreen('game');
   };
 
+  const handleViewStreaks = () => {
+    setCurrentScreen('streaks');
+  };
+
+  const handleStartLocalGame = () => {
+    setGameMode('local');
+    setCurrentScreen('game');
+  };
+
+  const handleStartAIGame = () => {
+    setGameMode('ai');
+    setCurrentScreen('game');
+  };
+
+  const handleStartMultiplayerGame = () => {
+    setGameMode('multiplayer');
+    setCurrentScreen('game');
+  };
+
+  const handleUserChange = (user: FarcasterUser | null) => {
+    setCurrentUser(user);
+  };
+
   const renderScreen = () => {
     switch (currentScreen) {
       case 'landing':
-        return <LandingPage onStartGame={handleStartGame} />;
+        return (
+          <LandingPage 
+            onStartGame={handleStartGame} 
+            currentUser={currentUser}
+            onUserChange={handleUserChange}
+            onViewStreaks={handleViewStreaks}
+            onStartLocalGame={handleStartLocalGame}
+            onStartAIGame={handleStartAIGame}
+            onStartMultiplayerGame={handleStartMultiplayerGame}
+          />
+        );
       case 'setup':
         return (
           <GameSetup
@@ -70,8 +112,20 @@ export default function App() {
             onBackToHome={handleBackToHome}
           />
         );
+      case 'streaks':
+        return (
+          <StreakPage onBack={handleBackToHome} />
+        );
       default:
-        return <LandingPage onStartGame={handleStartGame} />;
+        return <LandingPage 
+          onStartGame={handleStartGame} 
+          currentUser={currentUser} 
+          onUserChange={handleUserChange} 
+          onViewStreaks={handleViewStreaks}
+          onStartLocalGame={handleStartLocalGame}
+          onStartAIGame={handleStartAIGame}
+          onStartMultiplayerGame={handleStartMultiplayerGame}
+        />;
     }
   };
 

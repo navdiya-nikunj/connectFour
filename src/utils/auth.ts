@@ -45,7 +45,7 @@ async function getPrimaryAddress(fid: number): Promise<string | undefined> {
     );
     
     if (response.ok) {
-      const { result } = await response.json<{
+      const { result } = await response.json() as {
         result: {
           address: {
             fid: number;
@@ -53,7 +53,7 @@ async function getPrimaryAddress(fid: number): Promise<string | undefined> {
             address: string;
           };
         };
-      }>();
+      };
       return result.address.address;
     }
   } catch (error) {

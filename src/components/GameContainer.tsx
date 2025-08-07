@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { RotateCcw, Trophy, Users, Bot } from 'lucide-react';
+import { RotateCcw, Trophy, Users, Bot, Flame } from 'lucide-react';
 import GameBoard from './GameBoard';
+import StreakPage from './StreakPage';
 
 import { GameState } from '@/types/game';
 import { getInitialGameState, resetGame, updateGameState } from '@/utils/gameLogic';
@@ -14,6 +15,7 @@ export default function GameContainer() {
   const [gameMode, setGameMode] = useState<'local' | 'ai' | 'multiplayer'>('local');
   const [aiDifficulty, setAiDifficulty] = useState<AIDifficulty>('medium');
   const [isAITurn, setIsAITurn] = useState(false);
+  const [showStreakPage, setShowStreakPage] = useState(false);
 
   const handleGameStateChange = (newState: GameState) => {
     setGameState(newState);
@@ -72,6 +74,11 @@ export default function GameContainer() {
       return () => clearTimeout(timer);
     }
   }, [isAITurn, gameMode, gameState, aiDifficulty]);
+
+  // Show streak page
+  if (showStreakPage) {
+    return <StreakPage onBack={() => setShowStreakPage(false)} />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
@@ -192,7 +199,7 @@ export default function GameContainer() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex justify-center space-x-4"
+          className="flex justify-center space-x-4 mb-8"
         >
           <button
             onClick={handleResetGame}
@@ -219,6 +226,16 @@ export default function GameContainer() {
             <Trophy className="w-5 h-5" />
             <span>New Game</span>
           </button>
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowStreakPage(true)}
+            className="flex items-center space-x-2 px-6 py-3 rounded-lg shadow-lg transition-all bg-gradient-to-r from-orange-500 to-red-500 text-white hover:shadow-xl hover:from-orange-600 hover:to-red-600"
+          >
+            <Flame className="w-5 h-5" />
+            <span>View Streaks</span>
+          </motion.button>
         </motion.div>
 
         {/* Game Statistics */}

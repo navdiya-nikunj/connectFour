@@ -2,16 +2,37 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Play, Users, Bot, Trophy, ArrowRight, Share } from 'lucide-react';
+import { Play, Users, Bot, Trophy, ArrowRight, Share, Flame, Gamepad2 } from 'lucide-react';
 import Image from 'next/image';
 import sdk from '@farcaster/miniapp-sdk';
 import FarcasterAuth from './FarcasterAuth';
 
-interface LandingPageProps {
-  onStartGame: () => void;
+interface FarcasterUser {
+  fid: number;
+  username?: string;
+  displayName?: string;
+  avatar?: string;
 }
 
-export default function LandingPage({ onStartGame }: LandingPageProps) {
+interface LandingPageProps {
+  onStartGame: () => void;
+  currentUser: FarcasterUser | null;
+  onUserChange: (user: FarcasterUser | null) => void;
+  onViewStreaks: () => void;
+  onStartLocalGame: () => void;
+  onStartAIGame: () => void;
+  onStartMultiplayerGame: () => void;
+}
+
+export default function LandingPage({ 
+  onStartGame, 
+  currentUser, 
+  onUserChange, 
+  onViewStreaks,
+  onStartLocalGame,
+  onStartAIGame,
+  onStartMultiplayerGame
+}: LandingPageProps) {
   
   const features = [
     {
@@ -49,40 +70,66 @@ export default function LandingPage({ onStartGame }: LandingPageProps) {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-8 px-4">
       <div className="max-w-4xl mx-auto text-center">
         {/* Header */}
-        <div className="flex justify-center mb-6">
-          <FarcasterAuth onUserChange={() => {
-            console.log('user changed');
-          }} />
+        <div className="flex justify-between mb-6">
+          <div className="flex justify-center">
+            <Image
+              src="/logo.png"
+              alt="Connect Four Logo"
+              width={80}
+              height={80}
+              className=""
+              priority
+            />
+          </div>
+          <FarcasterAuth onUserChange={onUserChange} currentUser={currentUser} />
         </div>
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <div className="flex justify-center mb-6">
-            <Image
-              src="/logo.png"
-              alt="Connect Four Logo"
-              width={120}
-              height={120}
-              className="rounded-lg shadow-lg"
-              priority
-            />
-          </div>
-          <h1 className="text-6xl font-bold text-gray-800 mb-4">
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">
             Connect Four
           </h1>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-lg text-gray-600 mb-8">
             The classic game, reimagined for Farcaster
           </p>
           <div className="w-24 h-1 bg-blue-500 mx-auto rounded-full"></div>
         </motion.div>
 
-        {/* Start Game Button */}
+        {/* Quick Access Buttons - Only show when logged in */}
+        {currentUser && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mb-8"
+          >
+            <div className="bg-white rounded-lg p-6 shadow-lg max-w-4xl mx-auto">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                Welcome back, {currentUser.displayName || `User ${currentUser.fid}`}! 🎮
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={onViewStreaks}
+                  className="flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-3 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all shadow-md hover:shadow-lg"
+                >
+                  <Flame className="w-4 h-4" />
+                  <span className="font-medium text-sm">View Streaks</span>
+                </motion.button>
+              </div>
+              
+            </div>
+          </motion.div>
+        )}
+
+        {/* Start Game Button - Show for everyone */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: currentUser ? 0.6 : 0.5 }}
           className="flex flex-col sm:flex-row mb-10 gap-4 justify-center items-center"
         >
           <button
@@ -115,7 +162,7 @@ export default function LandingPage({ onStartGame }: LandingPageProps) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: currentUser ? 0.7 : 0.2 }}
           className="grid md:grid-cols-3 gap-6 mb-12"
         >
           {features.map((feature, index) => (
@@ -123,7 +170,7 @@ export default function LandingPage({ onStartGame }: LandingPageProps) {
               key={index}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + index * 0.1 }}
+              transition={{ delay: (currentUser ? 0.8 : 0.3) + index * 0.1 }}
               className="bg-white rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow"
             >
               <div className="text-blue-500 mb-4 flex justify-center">
@@ -145,7 +192,7 @@ export default function LandingPage({ onStartGame }: LandingPageProps) {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: currentUser ? 0.9 : 0.7 }}
           className="mt-12 text-gray-500"
         >
           <p className="text-sm">

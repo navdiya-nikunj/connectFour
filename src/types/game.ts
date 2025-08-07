@@ -47,4 +47,41 @@ export interface GameHistory {
   players: PlayerInfo[];
   duration: number;
   createdAt: Date;
+}
+
+// Streak-related types
+export interface UserStreak {
+  fid: number;
+  currentStreak: number;
+  longestStreak: number;
+  totalWins: number;
+  totalGames: number;
+  lastWinDate: Date | null;
+  streakStartDate: Date | null;
+  updatedAt: Date;
+}
+
+export interface StreakStats {
+  fid: number;
+  username?: string;
+  displayName?: string;
+  avatar?: string;
+  currentStreak: number;
+  longestStreak: number;
+  totalWins: number;
+  totalGames: number;
+  winRate: number;
+  lastWinDate: Date | null;
+  streakStartDate: Date | null;
+}
+
+export interface StreakShareData {
+  fid: number;
+  username: string;
+  displayName: string;
+  avatar: string;
+  currentStreak: number;
+  longestStreak: number;
+  totalWins: number;
+  winRate: number;
 } 

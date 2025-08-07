@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Connect Four - Farcaster Mini App",
   description: "Play Connect Four with your Farcaster friends! Classic gameplay with social features and tournaments.",
   keywords: "connect four, farcaster, game, multiplayer, social gaming",
-  authors: [{ name: "Connect Four Team" }],
+  authors: [{ name: "Nikunj Navdiya" }],
   viewport: "width=device-width, initial-scale=1",
   other: {
     "fc:miniapp": JSON.stringify({
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
         action: {
           type: "launch_frame",
           name: "Connect Four",
-          url: "https://pzm0b0bg-3000.inc1.devtunnels.ms",
+          url: "https://connect-four-hazel.vercel.app",
           splashImageUrl: "https://connect-four-hazel.vercel.app/logo.png",
         }
       }
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
         action: {
           type: "launch_frame",
           name: "Connect Four",
-          url: "https://pzm0b0bg-3001.inc1.devtunnels.ms",
+          url: "https://connect-four-hazel.vercel.app",
           splashImageUrl: "https://connect-four-hazel.vercel.app/logo.png",
         }
       },

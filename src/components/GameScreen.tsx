@@ -9,6 +9,13 @@ import { getInitialGameState, resetGame, updateGameState } from '@/utils/gameLog
 import { getAIMove, AIDifficulty } from '@/utils/aiLogic';
 import { sdk } from '@farcaster/miniapp-sdk';
 
+interface FarcasterUser {
+  fid: number;
+  username?: string;
+  displayName?: string;
+  avatar?: string;
+}
+
 interface GameScreenProps {
   gameMode: 'local' | 'ai' | 'multiplayer';
   aiDifficulty: AIDifficulty;
@@ -21,6 +28,24 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
   const [isAITurn, setIsAITurn] = useState(false);
   const [gameStartTime, setGameStartTime] = useState<Date>(new Date());
   const [moves, setMoves] = useState<Array<{ column: number; player: 'red' | 'yellow'; timestamp: Date }>>([]);
+  const [currentUser, setCurrentUser] = useState<FarcasterUser | null>(null);
+
+  // Get current user on component mount
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      try {
+        const response = await sdk.quickAuth.fetch('/api/user');
+        if (response.ok) {
+          const userData = await response.json();
+          setCurrentUser(userData);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    getCurrentUser();
+  }, []);
 
   const handleGameStateChange = (newState: GameState) => {
     setGameState(newState);
@@ -60,25 +85,78 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
     setMoves([]);
   };
 
+  const updateStreakAfterGame = async (isWin: boolean) => {
+    try {
+      const response = await sdk.quickAuth.fetch('/api/streak', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ isWin }),
+      });
+
+      if (response.ok) {
+        console.log('Streak updated successfully');
+      } else {
+        console.error('Failed to update streak');
+      }
+    } catch (error) {
+      console.error('Error updating streak:', error);
+    }
+  };
+
   const saveGameHistory = async (finalGameState: GameState) => {
+    // Don't save local games
+    if (gameMode === 'local') {
+      console.log('Local game - not saving to database');
+      return;
+    }
+
+    // Don't save if no user is authenticated
+    if (!currentUser) {
+      console.log('No authenticated user - not saving game history');
+      return;
+    }
+
     try {
       const duration = Date.now() - gameStartTime.getTime();
       
-      // Create mock players for now (in a real app, you'd get this from user context)
-      const players = {
-        red: {
-          fid: 12345,
-          username: 'player_red',
-          displayName: 'Red Player',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=red'
-        },
-        yellow: {
-          fid: 67890,
-          username: 'player_yellow',
-          displayName: 'Yellow Player',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=yellow'
-        }
-      };
+      // Create players based on game mode
+      let players;
+      
+      if (gameMode === 'ai') {
+        // AI game: current user vs AI (fid -1)
+        players = {
+          red: {
+            fid: currentUser.fid,
+            username: currentUser.username || 'player',
+            displayName: currentUser.displayName || 'Player',
+            avatar: currentUser.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=player'
+          },
+          yellow: {
+            fid: -1, // AI player
+            username: 'ai_opponent',
+            displayName: `AI (${aiDifficulty})`,
+            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ai'
+          }
+        };
+      } else {
+        // Multiplayer game (for future implementation)
+        players = {
+          red: {
+            fid: currentUser.fid,
+            username: currentUser.username || 'player',
+            displayName: currentUser.displayName || 'Player',
+            avatar: currentUser.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=player'
+          },
+          yellow: {
+            fid: 0, // Placeholder for multiplayer
+            username: 'opponent',
+            displayName: 'Opponent',
+            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=opponent'
+          }
+        };
+      }
 
       const gameHistoryData = {
         gameMode,
@@ -99,6 +177,15 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
 
       if (response.ok) {
         console.log('Game history saved successfully');
+        
+        // Update streak for the current user if they won
+        if (finalGameState.gameStatus === 'won' && finalGameState.winner === 'red') {
+          await updateStreakAfterGame(true);
+        } else if (finalGameState.gameStatus === 'won' && finalGameState.winner === 'yellow') {
+          // User lost
+          await updateStreakAfterGame(false);
+        }
+        // Draw doesn't affect streak
       } else {
         console.error('Failed to save game history');
       }
@@ -115,7 +202,7 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
       const winner = gameState.winner === 'red' ? 'Red' : 'Yellow';
       if (gameMode === 'ai') {
         castText = gameState.winner !== 'red'
-          ?  `🤖 The AI just destroyed me in Connect Four. I, for one, welcome our new robot overlords. Maybe I’ll try tic-tac-toe next time. 🤦‍♂️\n\nPlay now: ${gameUrl}`
+          ?  `🤖 The AI just destroyed me in Connect Four. I, for one, welcome our new robot overlords. Maybe I'll try tic-tac-toe next time. 🤦‍♂️\n\nPlay now: ${gameUrl}`
           :   `🤖 I just outsmarted the AI in Connect Four. Somewhere, a robot is crying. Bow before your new digital overlord! 🏆\n\nPlay now: ${gameUrl}`;
       } else {
         castText = `🎮 Just won a game of Connect Four on Farcaster! ${winner} player took the victory! 🏆\n\nPlay now: ${gameUrl}`;
@@ -228,7 +315,7 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col space-y-2 mb-4"
+          className="flex justify-center space-x-3 mb-4 "
         >
           <button
             onClick={handleResetGame}
@@ -256,14 +343,10 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
             <span>New Game</span>
           </button>
           
-          <button
-            onClick={handleShareResult}
-            className="flex items-center justify-center space-x-2 px-4 py-2 rounded-lg shadow-md transition-all bg-purple-500 text-white hover:shadow-lg hover:bg-purple-600 text-sm"
-          >
-            <Share className="w-4 h-4" />
-            <span>Share Result</span>
-          </button>
+          
         </motion.div>
+
+        
 
         {/* Compact Game Statistics */}
         {gameState.gameStatus !== 'playing' && (
@@ -290,7 +373,15 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
                   </p>
                 </div>
               </div>
+              <button
+            onClick={handleShareResult}
+            className="flex items-center w-full  justify-center space-x-2 px-4 py-2 rounded-lg shadow-md transition-all bg-purple-500 text-white hover:shadow-lg hover:bg-purple-600 text-sm"
+          >
+            <Share className="w-4 h-4" />
+            <span>Share Result</span>
+          </button>
             </div>
+            
           </motion.div>
         )}
 
