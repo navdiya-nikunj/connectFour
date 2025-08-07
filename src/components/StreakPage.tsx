@@ -54,26 +54,12 @@ export default function StreakPage({ onBack, className = '' }: StreakPageProps) 
     if (!userStreak) return;
     const gameUrl = window.location.href || "https://connect-four-hazel.vercel.app"
      sdk.actions.composeCast({ 
-        text: "Check out my Connect Four streak!",
-        embeds: [ `${gameUrl}/api/streak/fid?fid=${userStreak.fid}`],
-        channelKey: "farcaster" // optional channel
+        text: `Check out my Connect Four streak! built by @nik-navdiya here: ${gameUrl}/${userStreak.fid}`,
+        embeds: [ `${gameUrl}/${userStreak.fid}`]
     });
   };
 
-  const handleShareLink = () => {
-    if (!userStreak) return;
-    
-    const baseUrl = window.location.origin;
-    const shareUrl = `${baseUrl}/${userStreak.fid}`;
-    
-    // Share on Farcaster
-    const castText = `🔥 Check out my Connect Four streak! ${shareUrl}`;
-    
-    sdk.actions.composeCast({
-      text: castText,
-      embeds: [shareUrl]
-    });
-  };
+  
 
   const handleDownloadFrame = () => {
     // This would integrate with a screenshot library like html2canvas
