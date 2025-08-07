@@ -7,7 +7,7 @@ import GameBoard from './GameBoard';
 import { GameState } from '@/types/game';
 import { getInitialGameState, resetGame, updateGameState } from '@/utils/gameLogic';
 import { getAIMove, AIDifficulty } from '@/utils/aiLogic';
-import sdk from '@farcaster/miniapp-sdk';
+import { sdk } from '@farcaster/miniapp-sdk';
 
 interface GameScreenProps {
   gameMode: 'local' | 'ai' | 'multiplayer';
@@ -19,24 +19,92 @@ interface GameScreenProps {
 export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBackToHome }: GameScreenProps) {
   const [gameState, setGameState] = useState<GameState>(getInitialGameState());
   const [isAITurn, setIsAITurn] = useState(false);
+  const [gameStartTime, setGameStartTime] = useState<Date>(new Date());
+  const [moves, setMoves] = useState<Array<{ column: number; player: 'red' | 'yellow'; timestamp: Date }>>([]);
 
   const handleGameStateChange = (newState: GameState) => {
     setGameState(newState);
     
+    // Track moves for game history
+    if (newState.lastMove !== null && newState.lastMove !== gameState.lastMove) {
+      const player = newState.currentPlayer === 'red' ? 'yellow' : 'red'; // The player who just moved
+      setMoves(prev => [...prev, {
+        column: newState.lastMove!,
+        player,
+        timestamp: new Date()
+      }]);
+    }
+    
     // If playing against AI and it's AI's turn, make AI move
     if (gameMode === 'ai' && newState.gameStatus === 'playing' && newState.currentPlayer === 'yellow') {
       setIsAITurn(true);
+    }
+    
+    // Save game history when game ends
+    if (newState.gameStatus !== 'playing' && gameState.gameStatus === 'playing') {
+      saveGameHistory(newState);
     }
   };
 
   const handleResetGame = () => {
     setGameState(resetGame());
     setIsAITurn(false);
+    setGameStartTime(new Date());
+    setMoves([]);
   };
 
   const handleNewGame = () => {
     setGameState(getInitialGameState());
     setIsAITurn(false);
+    setGameStartTime(new Date());
+    setMoves([]);
+  };
+
+  const saveGameHistory = async (finalGameState: GameState) => {
+    try {
+      const duration = Date.now() - gameStartTime.getTime();
+      
+      // Create mock players for now (in a real app, you'd get this from user context)
+      const players = {
+        red: {
+          fid: 12345,
+          username: 'player_red',
+          displayName: 'Red Player',
+          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=red'
+        },
+        yellow: {
+          fid: 67890,
+          username: 'player_yellow',
+          displayName: 'Yellow Player',
+          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=yellow'
+        }
+      };
+
+      const gameHistoryData = {
+        gameMode,
+        aiDifficulty: gameMode === 'ai' ? aiDifficulty : undefined,
+        winner: finalGameState.winner || 'draw',
+        players,
+        moves,
+        duration
+      };
+
+      const response = await sdk.quickAuth.fetch('/api/game-history', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(gameHistoryData),
+      });
+
+      if (response.ok) {
+        console.log('Game history saved successfully');
+      } else {
+        console.error('Failed to save game history');
+      }
+    } catch (error) {
+      console.error('Error saving game history:', error);
+    }
   };
 
   const handleShareResult = () => {
@@ -45,7 +113,13 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
     
     if (gameState.gameStatus === 'won') {
       const winner = gameState.winner === 'red' ? 'Red' : 'Yellow';
-      castText = `🎮 Just won a game of Connect Four on Farcaster! ${winner} player took the victory! 🏆\n\nPlay now: ${gameUrl}`;
+      if (gameMode === 'ai') {
+        castText = gameState.winner !== 'red'
+          ?  `🤖 The AI just destroyed me in Connect Four. I, for one, welcome our new robot overlords. Maybe I’ll try tic-tac-toe next time. 🤦‍♂️\n\nPlay now: ${gameUrl}`
+          :   `🤖 I just outsmarted the AI in Connect Four. Somewhere, a robot is crying. Bow before your new digital overlord! 🏆\n\nPlay now: ${gameUrl}`;
+      } else {
+        castText = `🎮 Just won a game of Connect Four on Farcaster! ${winner} player took the victory! 🏆\n\nPlay now: ${gameUrl}`;
+      }
     } else if (gameState.gameStatus === 'draw') {
       castText = `🎮 Just played Connect Four on Farcaster! It was a thrilling draw! 🤝\n\nPlay now: ${gameUrl}`;
     } else {

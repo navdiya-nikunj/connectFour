@@ -17,7 +17,7 @@ export const metadata: Metadata = {
         action: {
           type: "launch_frame",
           name: "Connect Four",
-          url: "https://connect-four-hazel.vercel.app",
+          url: "https://pzm0b0bg-3000.inc1.devtunnels.ms",
           splashImageUrl: "https://connect-four-hazel.vercel.app/logo.png",
         }
       }
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
         action: {
           type: "launch_frame",
           name: "Connect Four",
-          url: "https://connect-four-hazel.vercel.app",
+          url: "https://pzm0b0bg-3001.inc1.devtunnels.ms",
           splashImageUrl: "https://connect-four-hazel.vercel.app/logo.png",
         }
       },

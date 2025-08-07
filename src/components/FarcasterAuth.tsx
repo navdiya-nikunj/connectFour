@@ -40,6 +40,8 @@ export default function FarcasterAuth({ onUserChange }: FarcasterAuthProps) {
         console.error('Error checking auth status:', error);
       } finally {
         setIsLoading(false);
+        // Tell the SDK that the app is ready to display
+        await sdk.actions.ready();
       }
     };
 
@@ -52,7 +54,8 @@ export default function FarcasterAuth({ onUserChange }: FarcasterAuthProps) {
     try {
       // Get Quick Auth token
       const { token } = await sdk.quickAuth.getToken();
-      console.log(token);
+      console.log('frontend token', token);
+      console.log('Quick Auth token acquired');
       
       // Fetch user data from your backend
       const response = await sdk.quickAuth.fetch('/api/user');
@@ -62,7 +65,7 @@ export default function FarcasterAuth({ onUserChange }: FarcasterAuthProps) {
         setUser(userData);
         onUserChange(userData);
       } else {
-        console.error('Failed to fetch user data');
+        console.error('Failed to fetch user data:', response.status);
       }
     } catch (error) {
       console.error('Authentication error:', error);
@@ -96,6 +99,8 @@ export default function FarcasterAuth({ onUserChange }: FarcasterAuthProps) {
             <Image
               src={user.avatar}
               alt={user.displayName || `User ${user.fid}`}
+              width={32}
+              height={32}
               className="w-8 h-8 rounded-full"
             />
           )}
@@ -135,10 +140,7 @@ export default function FarcasterAuth({ onUserChange }: FarcasterAuthProps) {
           {isConnecting ? 'Connecting...' : 'Connect with Farcaster'}
         </span>
       </button>
-      
-      <div className="text-xs text-gray-600 max-w-xs bg-gray-50 rounded-lg p-2">
-        Connect your Farcaster account to play with friends and share results
-      </div>
+     
     </motion.div>
   );
 } 

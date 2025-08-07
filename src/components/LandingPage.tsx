@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Play, Users, Bot, Trophy, ArrowRight, Share } from 'lucide-react';
 import Image from 'next/image';
 import sdk from '@farcaster/miniapp-sdk';
+import FarcasterAuth from './FarcasterAuth';
 
 interface LandingPageProps {
   onStartGame: () => void;
@@ -48,6 +49,11 @@ export default function LandingPage({ onStartGame }: LandingPageProps) {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-8 px-4">
       <div className="max-w-4xl mx-auto text-center">
         {/* Header */}
+        <div className="flex justify-center mb-6">
+          <FarcasterAuth onUserChange={() => {
+            console.log('user changed');
+          }} />
+        </div>
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
