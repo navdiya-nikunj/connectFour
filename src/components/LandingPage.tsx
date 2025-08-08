@@ -206,7 +206,7 @@ export default function LandingPage({
           className="mt-12 text-gray-500"
         >
           <p className="text-sm">
-            Built with ❤️ for the Farcaster community
+            Built with ❤️ by @nik-navdiya for the Farcaster community
           </p>
         </motion.div>
       </div>
