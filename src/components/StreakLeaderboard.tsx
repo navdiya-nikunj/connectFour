@@ -94,7 +94,7 @@ export default function StreakLeaderboard({ entries, className = '' }: StreakLea
               } ${getRankColor(index + 1)}`}
             >
               {/* Rank */}
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20">
+              <div className="flex hidden md:flex items-center justify-center w-8 h-8 rounded-full bg-white/20">
                 {getRankIcon(index + 1)}
               </div>
 
@@ -114,7 +114,7 @@ export default function StreakLeaderboard({ entries, className = '' }: StreakLea
               {/* User Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2">
-                  <h3 className="font-semibold truncate">
+                  <h3 className="font-semibold truncate text-sm md:text-base">
                     {entry.displayName || entry.username || `User ${entry.fid}`}
                   </h3>
                   {index < 3 && (
@@ -123,7 +123,7 @@ export default function StreakLeaderboard({ entries, className = '' }: StreakLea
                     </span>
                   )}
                 </div>
-                <p className="text-sm opacity-80 truncate">
+                <p className="text-xs md:text-sm opacity-80 truncate">
                   @{entry.username || `user${entry.fid}`}
                 </p>
               </div>

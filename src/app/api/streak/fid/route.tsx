@@ -25,7 +25,7 @@ function getStreakColor(currentStreak: number): string {
 
 export async function GET(request: Request) {
   try {
-    console.log('request', request);
+   
     const { searchParams } = new URL(request.url);
     const fid = searchParams.get('fid') ?? '0';
     const fidNumber = parseInt(fid, 10);
@@ -34,6 +34,7 @@ export async function GET(request: Request) {
     // Fetch user data
     const user = await getUserByFid(fidNumber);
     const streak = await getUserStreak(fidNumber);
+    const baseUrl =  'http://localhost:3000';
 
     if (!user || !streak) {
       return new ImageResponse(
@@ -126,6 +127,16 @@ export async function GET(request: Request) {
             display: 'flex',
           }} />
 
+
+          <div style={{ 
+            fontSize: '56px', 
+            fontWeight: 700, 
+            marginBottom: '12px', 
+            display: 'flex', 
+            justifyContent: 'space-between',
+          }}>
+           
+         
           {/* Header */}
           <div style={{ 
             fontSize: '56px', 
@@ -133,9 +144,12 @@ export async function GET(request: Request) {
             marginBottom: '12px', 
             display: 'flex', 
             justifyContent: 'center',
-            textShadow: '0 4px 8px rgba(0,0,0,0.3)',
+            background: 'rgba(255,255,255,0.5)',
+            padding:'1px',
+            marginRight: '2px'
           }}>
-            Connect Four
+<img src={`${baseUrl}/logo.png`} width={100}  height={100}/>
+
           </div>
           
           
@@ -180,6 +194,7 @@ export async function GET(request: Request) {
               </div>
             </div>
           </div>
+           </div>
           
           {/* Streak Card */}
           <div style={{

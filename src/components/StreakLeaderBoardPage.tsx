@@ -35,32 +35,32 @@ export default function StreakLeaderBoardPage({onBack}: { onBack: () => void }) 
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center"
+        className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4"
       >
         <div className="text-center">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"
+            className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full mx-auto mb-2"
           />
-          <p className="text-gray-600">Loading streak data...</p>
+          <p className="text-sm text-gray-600">Loading streak data...</p>
         </div>
       </motion.div>
     );
   }
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-        <div className="flex items-center space-x-4 mb-5">
+        <div className="flex flex-col items-center justify-center min-h-screen max-w-full bg-gray-100 p-4">
+        <div className="flex items-center w-full space-x-2 mb-3">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={onBack}
-              className="p-3 bg-white rounded-full shadow-lg hover:shadow-xl transition-shadow"
+              className="p-2 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow"
             >
-              <ArrowLeft className="w-5 h-5 text-gray-600" />
+              <ArrowLeft className="w-4 h-4 text-gray-600" />
             </motion.button>
             <div>
-              <h1 className="text-4xl font-bold text-gray-800">Streak Dashboard</h1>
+              <h1 className="text-xl font-bold text-gray-800">Streak Dashboard</h1>
             </div>
           </div>
 
@@ -70,6 +70,7 @@ export default function StreakLeaderBoardPage({onBack}: { onBack: () => void }) 
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 20 }}
                       transition={{ duration: 0.3 }}
+                      className="w-full"
                     >
                       <StreakLeaderboard entries={leaderboard} />
                     </motion.div>
