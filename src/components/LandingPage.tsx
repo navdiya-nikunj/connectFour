@@ -6,6 +6,7 @@ import { Play, Users, Bot, Trophy, ArrowRight, Share, Flame, Gamepad2 } from 'lu
 import Image from 'next/image';
 import sdk from '@farcaster/miniapp-sdk';
 import FarcasterAuth from './FarcasterAuth';
+import Link from 'next/link';
 
 interface FarcasterUser {
   fid: number;
@@ -207,6 +208,12 @@ export default function LandingPage({
         >
           <p className="text-sm">
             Built with ❤️ by @nik-navdiya for the Farcaster community
+          </p>
+          <p className="text-sm">
+            <a href="https://github.com/navdiya-nikunj/connectFour" className="text-blue-500">GitHub</a>
+          </p>
+          <p className="text-sm">
+            <Link href="/docs" className="text-blue-500">Docs</Link>
           </p>
         </motion.div>
       </div>
