@@ -289,28 +289,18 @@ export async function updateStreakAfterGame(fid: number, isWin: boolean): Promis
     const now = new Date();
     streak.lastWinDate = now;
     
-    // Check if this is the first win or if 24 hours have passed since last win
-    const shouldStartNewStreak = !streak.lastWinDate || 
-      (now.getTime() - streak.lastWinDate.getTime()) > 24 * 60 * 60 * 1000;
-    
-    if (shouldStartNewStreak) {
-      // Start a new streak (first win or more than 24 hours since last win)
-      streak.currentStreak = 1;
-      streak.streakStartDate = now;
-    } else {
-      // Continue existing streak (within 24 hours)
+   
       streak.currentStreak += 1;
-      // Keep the original streak start date
-    }
+
+    
     
     // Update longest streak if current streak is longer
     if (streak.currentStreak > streak.longestStreak) {
       streak.longestStreak = streak.currentStreak;
     }
   } else {
-    // On loss, don't reset the streak immediately
-    // The streak will be reset if the user doesn't win within 24 hours
-    // This allows for a more forgiving streak system
+    
+    streak.currentStreak = 0;
   }
 
   streak.updatedAt = new Date();
