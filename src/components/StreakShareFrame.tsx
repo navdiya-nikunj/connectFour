@@ -1,6 +1,5 @@
-'use client';
 
-import React from 'react';
+
 import { motion } from 'framer-motion';
 import { Crown, Trophy, Star, Flame, Target, TrendingUp } from 'lucide-react';
 import { StreakShareData } from '@/types/game';
@@ -10,7 +9,7 @@ interface StreakShareFrameProps {
   className?: string;
 }
 
-export default function StreakShareFrame({ data, className = '' }: StreakShareFrameProps) {
+function StreakShareFrame({ data, className = '' }: StreakShareFrameProps) {
   const getStreakColor = (currentStreak: number) => {
     if (currentStreak >= 10) return 'from-red-500 via-orange-500 to-red-600';
     if (currentStreak >= 5) return 'from-orange-500 via-yellow-500 to-orange-600';
@@ -170,3 +169,6 @@ export default function StreakShareFrame({ data, className = '' }: StreakShareFr
     </motion.div>
   );
 }
+
+export default StreakShareFrame;
+export { StreakShareFrame };

@@ -34,7 +34,7 @@ export async function GET(request: Request) {
     // Fetch user data
     const user = await getUserByFid(fidNumber);
     const streak = await getUserStreak(fidNumber);
-    const baseUrl =  'http://localhost:3000';
+    const baseUrl = 'https://connect-four-hazel.vercel.app' ;
 
     if (!user || !streak) {
       return new ImageResponse(
@@ -127,204 +127,269 @@ export async function GET(request: Request) {
             display: 'flex',
           }} />
 
-
-          <div style={{ 
-            fontSize: '56px', 
-            fontWeight: 700, 
-            marginBottom: '12px', 
-            display: 'flex', 
-            justifyContent: 'space-between',
-          }}>
-           
-         
-          {/* Header */}
-          <div style={{ 
-            fontSize: '56px', 
-            fontWeight: 700, 
-            marginBottom: '12px', 
-            display: 'flex', 
-            justifyContent: 'center',
-            background: 'rgba(255,255,255,0.5)',
-            padding:'1px',
-            marginRight: '2px'
-          }}>
-<img src={`${baseUrl}/logo.png`} width={100}  height={100}/>
-
-          </div>
-          
-          
-          {/* User Info */}
+          {/* Header Section */}
           <div style={{ 
             display: 'flex', 
             alignItems: 'center', 
-            gap: '20px',
-            marginBottom: '40px',
+            justifyContent: 'space-between',
+            width: '100%',
+            padding: '32px 48px',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
           }}>
+            {/* Logo */}
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              background: 'rgba(255,255,255,0.15)',
+              borderRadius: '16px',
+              padding: '12px 20px',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.2)',
+            }}>
+              <img src={`${baseUrl}/logo.png`} width={40} height={40} style={{ marginRight: '12px' }} />
+              <div style={{ 
+                fontSize: '24px', 
+                fontWeight: 700,
+                display: 'flex',
+              }}>
+                Connect Four
+              </div>
+            </div>
+
+            {/* Decorative Trophy */}
             <div style={{
-              width: '80px',
-              height: '80px',
+              width: '48px',
+              height: '48px',
               borderRadius: '50%',
-              border: '4px solid rgba(255, 255, 255, 0.3)',
-              background: 'rgba(255, 255, 255, 0.1)',
+              background: 'rgba(255, 255, 255, 0.15)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '32px',
+              fontSize: '24px',
+              border: '2px solid rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(10px)',
             }}>
-              {user.avatar ? '👤' : '🎮'}
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div style={{ 
-                fontSize: '32px', 
-                marginBottom: '8px', 
-                display: 'flex', 
-                justifyContent: 'center',
-                fontWeight: 700,
-                textShadow: '0 2px 4px rgba(0,0,0,0.3)',
-              }}>
-                {user.displayName || `User ${fid}`}
-              </div>
-              <div style={{ 
-                fontSize: '20px', 
-                display: 'flex', 
-                justifyContent: 'center',
-                opacity: 0.8,
-              }}>
-                @{user.username || `user${fid}`}
-              </div>
-            </div>
-          </div>
-           </div>
-          
-          {/* Streak Card */}
-          <div style={{
-            background: streakColor,
-            borderRadius: '32px',
-            padding: '40px',
-            textAlign: 'center',
-            marginBottom: '40px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)',
-            border: '2px solid rgba(255, 255, 255, 0.2)',
-            minWidth: '400px',
-          }}>
-            <div style={{ 
-              fontSize: '120px', 
-              fontWeight: 700, 
-              marginBottom: '16px', 
-              display: 'flex', 
-              justifyContent: 'center',
-              lineHeight: '1',
-            }}>
-              {streakIcon} {streak.currentStreak}
-            </div>
-            <div style={{ 
-              fontSize: '28px', 
-              marginBottom: '16px', 
-              display: 'flex', 
-              justifyContent: 'center',
-              fontWeight: 600,
-            }}>
-              {streak.currentStreak === 1 ? 'win' : 'wins'} in a row
-            </div>
-            <div style={{ 
-              fontSize: '24px', 
-              fontWeight: 600, 
-              display: 'flex', 
-              justifyContent: 'center',
-              textShadow: '0 2px 4px rgba(0,0,0,0.3)',
-            }}>
-              {streakMessage}
+              🏆
             </div>
           </div>
           
-          {/* Stats Row */}
+          {/* Main Content */}
           <div style={{ 
             display: 'flex', 
-            gap: '80px',
+            flexDirection: 'column',
+            alignItems: 'center',
             justifyContent: 'center',
+            width: '100%',
+            padding: '120px 48px 80px 48px',
           }}>
+            {/* User Info */}
             <div style={{ 
-              textAlign: 'center', 
               display: 'flex', 
-              flexDirection: 'column',
-              alignItems: 'center',
+              alignItems: 'center', 
+              gap: '24px',
+              marginBottom: '48px',
+              background: 'rgba(255,255,255,0.1)',
+              borderRadius: '24px',
+              padding: '24px 32px',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.2)',
             }}>
-              <div style={{ 
-                fontSize: '48px', 
-                fontWeight: 700, 
-                display: 'flex', 
+              <div style={{
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
+                border: '4px solid rgba(255, 255, 255, 0.3)',
+                background: 'rgba(255, 255, 255, 0.15)',
+                display: 'flex',
+                alignItems: 'center',
                 justifyContent: 'center',
-                marginBottom: '8px',
-                textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                fontSize: '32px',
+                backdropFilter: 'blur(10px)',
               }}>
-                {streak.longestStreak}
+                {user.avatar ? '👤' : '🎮'}
               </div>
               <div style={{ 
-                fontSize: '16px', 
                 display: 'flex', 
-                justifyContent: 'center',
-                opacity: 0.8,
-                fontWeight: 500,
+                flexDirection: 'column', 
+                alignItems: 'flex-start',
+                gap: '8px',
               }}>
-                Best Streak
+                <div style={{ 
+                  fontSize: '36px', 
+                  fontWeight: 700,
+                  textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                  display: 'flex',
+                }}>
+                  {user.displayName || `User ${fid}`}
+                </div>
+                <div style={{ 
+                  fontSize: '20px', 
+                  opacity: 0.8,
+                  display: 'flex',
+                }}>
+                  @{user.username || `user${fid}`}
+                </div>
               </div>
             </div>
-            <div style={{ 
-              textAlign: 'center', 
-              display: 'flex', 
+            
+            {/* Streak Card */}
+            <div style={{
+              background: streakColor,
+              borderRadius: '32px',
+              padding: '48px',
+              textAlign: 'center',
+              marginBottom: '126px',
+              display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)',
+              border: '2px solid rgba(255, 255, 255, 0.2)',
+              minWidth: '500px',
+              position: 'relative',
+              overflow: 'hidden',
             }}>
+              {/* Streak Card Background Pattern */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                opacity: 0.1,
+                background: 'radial-gradient(circle at 30% 70%, rgba(255,255,255,0.4) 0%, transparent 50%)',
+                display: 'flex',
+              }} />
+              
               <div style={{ 
-                fontSize: '48px', 
+                fontSize: '120px', 
                 fontWeight: 700, 
+                marginBottom: '16px', 
                 display: 'flex', 
                 justifyContent: 'center',
-                marginBottom: '8px',
-                textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                lineHeight: '1',
+                position: 'relative',
+                zIndex: 1,
               }}>
-                {streak.totalWins}
+                {streakIcon} {streak.currentStreak}
               </div>
               <div style={{ 
-                fontSize: '16px', 
+                fontSize: '28px', 
+                marginBottom: '16px', 
                 display: 'flex', 
                 justifyContent: 'center',
-                opacity: 0.8,
-                fontWeight: 500,
+                fontWeight: 600,
+                position: 'relative',
+                zIndex: 1,
               }}>
-                Total Wins
+                {streak.currentStreak === 1 ? 'win' : 'wins'} in a row
+              </div>
+              <div style={{ 
+                fontSize: '24px', 
+                fontWeight: 600, 
+                display: 'flex', 
+                justifyContent: 'center',
+                textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                position: 'relative',
+                zIndex: 1,
+              }}>
+                {streakMessage}
               </div>
             </div>
+            
+            {/* Stats Row
             <div style={{ 
-              textAlign: 'center', 
               display: 'flex', 
-              flexDirection: 'column',
-              alignItems: 'center',
+              gap: '80px',
+              justifyContent: 'center',
+              background: 'rgba(255,255,255,0.1)',
+              borderRadius: '24px',
+              padding: '32px 48px',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.2)',
             }}>
               <div style={{ 
-                fontSize: '48px', 
-                fontWeight: 700, 
+                textAlign: 'center', 
                 display: 'flex', 
-                justifyContent: 'center',
-                marginBottom: '8px',
-                textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '8px',
               }}>
-                {winRate}%
+                <div style={{ 
+                  fontSize: '48px', 
+                  fontWeight: 700, 
+                  display: 'flex', 
+                  justifyContent: 'center',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                }}>
+                  {streak.longestStreak}
+                </div>
+                <div style={{ 
+                  fontSize: '16px', 
+                  display: 'flex', 
+                  justifyContent: 'center',
+                  opacity: 0.8,
+                  fontWeight: 500,
+                }}>
+                  Best Streak
+                </div>
               </div>
               <div style={{ 
-                fontSize: '16px', 
+                textAlign: 'center', 
                 display: 'flex', 
-                justifyContent: 'center',
-                opacity: 0.8,
-                fontWeight: 500,
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '8px',
               }}>
-                Win Rate
+                <div style={{ 
+                  fontSize: '48px', 
+                  fontWeight: 700, 
+                  display: 'flex', 
+                  justifyContent: 'center',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                }}>
+                  {streak.totalWins}
+                </div>
+                <div style={{ 
+                  fontSize: '16px', 
+                  display: 'flex', 
+                  justifyContent: 'center',
+                  opacity: 0.8,
+                  fontWeight: 500,
+                }}>
+                  Total Wins
+                </div>
               </div>
-            </div>
-          </div>
+              <div style={{ 
+                textAlign: 'center', 
+                display: 'flex', 
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '8px',
+              }}>
+                <div style={{ 
+                  fontSize: '48px', 
+                  fontWeight: 700, 
+                  display: 'flex', 
+                  justifyContent: 'center',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                }}>
+                  {winRate}%
+                </div>
+                <div style={{ 
+                  fontSize: '16px', 
+                  display: 'flex', 
+                  justifyContent: 'center',
+                  opacity: 0.8,
+                  fontWeight: 500,
+                }}>
+                  Win Rate
+                </div>
+              </div>
+            </div>*/}
+          </div> 
 
           {/* Footer */}
           <div style={{
@@ -343,6 +408,11 @@ export async function GET(request: Request) {
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
+              background: 'rgba(255,255,255,0.1)',
+              padding: '12px 20px',
+              borderRadius: '12px',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.2)',
             }}>
               📈 Play Connect Four on Farcaster
             </div>
@@ -352,44 +422,62 @@ export async function GET(request: Request) {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'flex-end',
+              background: 'rgba(255,255,255,0.1)',
+              padding: '12px 20px',
+              borderRadius: '12px',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.2)',
             }}>
-              <div style={{ fontSize: '12px', opacity: 0.7 }}>Powered by</div>
-              <div style={{ fontWeight: 700 }}>Connect Four Mini App</div>
+              <div style={{ 
+                fontSize: '12px', 
+                opacity: 0.7,
+                display: 'flex',
+              }}>
+                Powered by
+              </div>
+              <div style={{ 
+                fontWeight: 700,
+                display: 'flex',
+              }}>
+                Connect Four Mini App
+              </div>
             </div>
           </div>
 
           {/* Decorative Elements */}
           <div style={{
             position: 'absolute',
-            top: '32px',
-            right: '32px',
+            top: '120px',
+            right: '48px',
             width: '64px',
             height: '64px',
             borderRadius: '50%',
-            background: 'rgba(255, 255, 255, 0.1)',
+            background: 'rgba(255, 255, 255, 0.15)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '32px',
-            border: '2px solid rgba(255, 255, 255, 0.2)',
+            border: '2px solid rgba(255, 255, 255, 0.3)',
+            backdropFilter: 'blur(10px)',
           }}>
-            🏆
+            ⭐
           </div>
           <div style={{
             position: 'absolute',
-            bottom: '32px',
-            right: '120px',
+            bottom: '120px',
+            right: '48px',
             width: '48px',
             height: '48px',
             borderRadius: '50%',
-            background: 'rgba(255, 255, 255, 0.1)',
+            background: 'rgba(255, 255, 255, 0.15)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '24px',
-            border: '2px solid rgba(255, 255, 255, 0.2)',
+            border: '2px solid rgba(255, 255, 255, 0.3)',
+            backdropFilter: 'blur(10px)',
           }}>
-            ⭐
+            🔥
           </div>
         </div>
       ),
