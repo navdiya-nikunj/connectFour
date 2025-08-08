@@ -83,7 +83,8 @@ export default function StreakLeaderboard({ entries, className = '' }: StreakLea
       <div className="p-6">
         <AnimatePresence>
           {entries.map((entry, index) => (
-            <motion.div
+            
+            entry.fid > 0 && <motion.div
               key={entry.fid}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}

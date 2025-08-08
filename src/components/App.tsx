@@ -8,8 +8,10 @@ import GameSetup from './GameSetup';
 import GameScreen from './GameScreen';
 import StreakPage from './StreakPage';
 import { AIDifficulty } from '@/utils/aiLogic';
+import StreakLeaderboard from './StreakLeaderboard';
+import StreakLeaderBoardPage from './StreakLeaderBoardPage';
 
-type Screen = 'landing' | 'setup' | 'game' | 'streaks';
+type Screen = 'landing' | 'setup' | 'game' | 'streaks' | 'leaderboard';
 
 interface FarcasterUser {
   fid: number;
@@ -53,6 +55,12 @@ export default function App() {
     setCurrentScreen('setup');
   };
 
+
+  const handleOpenLeaderboard = () => {
+    setCurrentScreen('leaderboard');
+  }
+  
+
   const handleStartGameFromSetup = (mode: 'local' | 'ai' | 'multiplayer', difficulty: AIDifficulty) => {
     setGameMode(mode);
     setAiDifficulty(difficulty);
@@ -94,6 +102,7 @@ export default function App() {
             onStartLocalGame={handleStartLocalGame}
             onStartAIGame={handleStartAIGame}
             onStartMultiplayerGame={handleStartMultiplayerGame}
+            onOpenLeaderboard={handleOpenLeaderboard}
           />
         );
       case 'setup':
@@ -116,6 +125,9 @@ export default function App() {
         return (
           <StreakPage onBack={handleBackToHome} />
         );
+
+      case 'leaderboard':
+        return <StreakLeaderBoardPage onBack={handleBackToHome} />;
       default:
         return <LandingPage 
           onStartGame={handleStartGame} 
@@ -125,6 +137,7 @@ export default function App() {
           onStartLocalGame={handleStartLocalGame}
           onStartAIGame={handleStartAIGame}
           onStartMultiplayerGame={handleStartMultiplayerGame}
+          onOpenLeaderboard={handleOpenLeaderboard}
         />;
     }
   };

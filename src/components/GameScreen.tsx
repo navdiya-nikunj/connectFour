@@ -202,7 +202,7 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
       const winner = gameState.winner === 'red' ? 'Red' : 'Yellow';
       if (gameMode === 'ai') {
         castText = gameState.winner !== 'red'
-          ?  `🤖 The AI just destroyed me in Connect Four. I, for one, welcome our new robot overlords. Maybe I'll try tic-tac-toe next time. 🤦‍♂️\n\nPlay now: ${gameUrl}`
+          ?  `🤖 The AI just destroyed me in Connect Four. Maybe I'll try one more time. 🤦‍♂️\n\nPlay now: ${gameUrl}`
           :   `🤖 I just outsmarted the AI in Connect Four. Somewhere, a robot is crying. Bow before your new digital overlord! 🏆\n\nPlay now: ${gameUrl}`;
       } else {
         castText = `🎮 Just won a game of Connect Four on Farcaster! ${winner} player took the victory! 🏆\n\nPlay now: ${gameUrl}`;

@@ -54,8 +54,8 @@ export default function StreakPage({ onBack, className = '' }: StreakPageProps) 
     if (!userStreak) return;
     const gameUrl = window.location.href || "https://connect-four-hazel.vercel.app"
      sdk.actions.composeCast({ 
-        text: `Check out my Connect Four streak! built by @nik-navdiya here: ${gameUrl}/${userStreak.fid}`,
-        embeds: [ `${gameUrl}/${userStreak.fid}`]
+        text: `Check out my Connect Four streak! built by @nik-navdiya`,
+        embeds: [ `${gameUrl}${userStreak.fid}`]
     });
   };
 

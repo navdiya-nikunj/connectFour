@@ -22,6 +22,7 @@ interface LandingPageProps {
   onStartLocalGame: () => void;
   onStartAIGame: () => void;
   onStartMultiplayerGame: () => void;
+  onOpenLeaderboard: () => void;  
 }
 
 export default function LandingPage({ 
@@ -31,7 +32,8 @@ export default function LandingPage({
   onViewStreaks,
   onStartLocalGame,
   onStartAIGame,
-  onStartMultiplayerGame
+  onStartMultiplayerGame,
+  onOpenLeaderboard
 }: LandingPageProps) {
   
   const features = [
@@ -139,7 +141,7 @@ export default function LandingPage({
             <Play className="w-6 h-6" />
             <span>Start Game</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </button>
+          </button>     
           
           <button
             onClick={handleShare}
@@ -147,6 +149,14 @@ export default function LandingPage({
           >
             <Share className="w-6 h-6" />
             <span>Share on Farcaster</span>
+          </button>
+
+          <button
+            onClick={onOpenLeaderboard}
+            className="group bg-green-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-green-600 transition-all hover:shadow-xl flex items-center space-x-2"
+          >
+            <Trophy className="w-6 h-6" />
+            <span>View Leaderboard</span>
           </button>
 
           <button

@@ -5,14 +5,6 @@ import { getUserStreak, getTopStreaks, updateStreakAfterGame, getUserByFid, chec
 export async function GET(request: NextRequest) {
   try {
     // Validate Quick Auth token
-    const authenticatedUser = await validateQuickAuthToken(request);
-    
-    if (!authenticatedUser) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
 
     const { searchParams } = new URL(request.url);
     const action = searchParams.get('action');
@@ -42,6 +34,14 @@ export async function GET(request: NextRequest) {
       await checkAndResetExpiredStreaks();
       return NextResponse.json({ message: 'Expired streaks cleaned up successfully' });
     } else {
+      const authenticatedUser = await validateQuickAuthToken(request);
+    
+    if (!authenticatedUser) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
       // Get user's own streak (this will automatically check and reset expired streaks)
       const userStreak = await getUserStreak(authenticatedUser.fid);
       
