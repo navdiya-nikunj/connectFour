@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         action: {
           type: "launch_frame",
           name: "Connect Four",
-          url: "https://pzm0b0bg-3000.inc1.devtunnels.ms",
+          url: "https://connect-four-hazel.vercel.app",
           splashImageUrl: "https://connect-four-hazel.vercel.app/logo.png",
         }
       }
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         action: {
           type: "launch_frame",
           name: "Connect Four",
-          url: "https://pzm0b0bg-3000.inc1.devtunnels.ms",
+          url: "https://connect-four-hazel.vercel.app",
           splashImageUrl: "https://connect-four-hazel.vercel.app/logo.png",
         }
       },

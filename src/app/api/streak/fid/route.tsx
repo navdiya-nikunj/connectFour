@@ -40,7 +40,7 @@ export async function GET(request: Request) {
       return new ImageResponse(
         (
           <div style={{
-            width: '1200px',
+            width: '1000px',
             height: '630px',
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             display: 'flex',
@@ -103,8 +103,6 @@ export async function GET(request: Request) {
     return new ImageResponse(
       (
         <div style={{
-          width: '1200px',
-          height: '630px',
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           display: 'flex',
           flexDirection: 'column',
@@ -482,7 +480,7 @@ export async function GET(request: Request) {
         </div>
       ),
       {
-        width: 1200,
+        width: 1000,
         height: 630,
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate'
