@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { RotateCcw, Trophy, ArrowLeft, Home, Share } from 'lucide-react';
 import GameBoard from './GameBoard';
@@ -27,7 +27,7 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
   const [gameState, setGameState] = useState<GameState>(getInitialGameState());
   const [isAITurn, setIsAITurn] = useState(false);
   const [gameStartTime, setGameStartTime] = useState<Date>(new Date());
-  const [moves, setMoves] = useState<Array<{ column: number; player: 'red' | 'yellow'; timestamp: Date }>>([]);
+  const moves = useRef<Array<{ column: number; player: 'red' | 'yellow'; timestamp: Date }>>([]);
   const [currentUser, setCurrentUser] = useState<FarcasterUser | null>(null);
   const [gameId, setGameId] = useState<string | null>(null);
   
@@ -50,16 +50,19 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
 
   const handleGameStateChange = (newState: GameState) => {
     setGameState(newState);
-    
+    if(newState.gameStatus !== 'playing'){
+      console.log('newState', newState);
+    }
     // Track moves for game history
-    if (newState.lastMove !== null && newState.lastMove !== gameState.lastMove) {
+    if (newState.lastMove !== null ) {
       const player = newState.currentPlayer === 'red' ? 'yellow' : 'red'; // The player who just moved
-      setMoves(prev => [...prev, {
+      moves.current = [...moves.current, {
         column: newState.lastMove!,
         player,
         timestamp: new Date()
-      }]);
+      }];
     }
+   
     
     // If playing against AI and it's AI's turn, make AI move
     if (gameMode === 'ai' && newState.gameStatus === 'playing' && newState.currentPlayer === 'yellow') {
@@ -77,7 +80,7 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
     setGameState(resetGame());
     setIsAITurn(false);
     setGameStartTime(new Date());
-    setMoves([]);
+    moves.current = [];
     setGameId(null);
   };
 
@@ -85,7 +88,7 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
     setGameState(getInitialGameState());
     setIsAITurn(false);
     setGameStartTime(new Date());
-    setMoves([]);
+    moves.current = [];
     setGameId(null);
   };
 
@@ -115,7 +118,7 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
       console.log('Local game - not saving to database');
       return;
     }
-
+console.log('Final moves', moves.current);
     // Don't save if no user is authenticated
     if (!currentUser) {
       console.log('No authenticated user - not saving game history');
@@ -161,13 +164,13 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
           }
         };
       }
-
+      
       const gameHistoryData = {
         gameMode,
         aiDifficulty: gameMode === 'ai' ? aiDifficulty : undefined,
         winner: finalGameState.winner || 'draw',
         players,
-        moves,
+        moves: moves.current || [],
         duration
       };
 
