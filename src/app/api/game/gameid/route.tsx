@@ -137,7 +137,7 @@ export async function GET(request: Request) {
     return new ImageResponse(
       (
         <div style={{
-          width: '100%',
+          width: '80%',
           height: '630px',
           background: '#ffffff',
           display: 'flex',
