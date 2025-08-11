@@ -68,6 +68,7 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
     
     // Save game history when game ends
     if (newState.gameStatus !== 'playing' && gameState.gameStatus === 'playing') {
+      console.log('Saving game history');
       saveGameHistory(newState);
     }
   };
@@ -77,6 +78,7 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
     setIsAITurn(false);
     setGameStartTime(new Date());
     setMoves([]);
+    setGameId(null);
   };
 
   const handleNewGame = () => {
@@ -84,6 +86,7 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
     setIsAITurn(false);
     setGameStartTime(new Date());
     setMoves([]);
+    setGameId(null);
   };
 
   const updateStreakAfterGame = async (isWin: boolean) => {
@@ -230,7 +233,7 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
       const timer = setTimeout(() => {
         const aiMove = getAIMove(gameState, aiDifficulty);
         const newState = updateGameState(gameState, aiMove);
-        setGameState(newState);
+        handleGameStateChange(newState);
         setIsAITurn(false);
       }, 1000); // 1 second delay for AI thinking
 
