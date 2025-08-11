@@ -43,7 +43,7 @@ export default function GameBoard({ gameState, onGameStateChange, disabled = fal
       <motion.div
         key={`${row}-${col}`}
         className={`w-7 h-7 rounded-full border-2 border-gray-300 shadow-lg ${
-          player === 'red' ? 'bg-red-500' : 'bg-yellow-500'
+          player === 'red' ? 'bg-pink-500' : 'bg-blue-500'
         } ${isWinning ? 'ring-4 ring-green-500 ring-opacity-100 animate-pulse' : ''}`}
         initial={{ scale: 0, y: -30 }}
         animate={{ 
@@ -68,7 +68,7 @@ export default function GameBoard({ gameState, onGameStateChange, disabled = fal
     return (
       <motion.div
         className={`w-7 h-7 rounded-full border-2 border-gray-300 shadow-lg ${
-          gameState.currentPlayer === 'red' ? 'bg-red-500' : 'bg-yellow-500'
+          gameState.currentPlayer === 'red' ? 'bg-pink-500' : 'bg-blue-500'
         } opacity-50`}
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -83,7 +83,7 @@ export default function GameBoard({ gameState, onGameStateChange, disabled = fal
       <div className="text-center">
         {gameState.gameStatus === 'playing' && (
           <div className="flex items-center justify-center space-x-2 bg-white rounded-lg px-3 py-2 shadow-md">
-            <div className={`w-3 h-3 rounded-full ${gameState.currentPlayer === 'red' ? 'bg-red-500' : 'bg-yellow-500'}`} />
+            <div className={`w-3 h-3 rounded-full ${gameState.currentPlayer === 'red' ? 'bg-pink-500' : 'bg-blue-500'}`} />
             <span className="text-base font-semibold text-gray-800">
               {isAITurn ? 'AI is thinking...' : `${gameState.currentPlayer === 'red' ? 'Red' : 'Yellow'}'s turn`}
             </span>
@@ -99,7 +99,7 @@ export default function GameBoard({ gameState, onGameStateChange, disabled = fal
         {gameState.gameStatus === 'won' && (
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2 mb-1 bg-green-50 rounded-lg px-3 py-2 shadow-md border border-green-200">
-              <div className={`w-3 h-3 rounded-full ${gameState.winner === 'red' ? 'bg-red-500' : 'bg-yellow-500'}`} />
+              <div className={`w-3 h-3 rounded-full ${gameState.winner === 'red' ? 'bg-pink-500' : 'bg-blue-500'}`} />
               <span className="text-base font-bold text-green-700">
                 {gameState.winner === 'red' ? 'Red' : 'Yellow'} wins!
               </span>
@@ -123,7 +123,7 @@ export default function GameBoard({ gameState, onGameStateChange, disabled = fal
             <div className="bg-white rounded-lg px-2 py-0.5 shadow-sm">
               <span className="text-xs font-medium text-gray-700">
                 Current Player: 
-                <span className={`ml-1 font-bold ${gameState.currentPlayer === 'red' ? 'text-red-600' : 'text-yellow-600'}`}>{gameState.currentPlayer === 'red' ? 'Red' : 'Yellow'}</span>
+                <span className={`ml-1 font-bold ${gameState.currentPlayer === 'red' ? 'text-pink-600' : 'text-blue-600'}`}>{gameState.currentPlayer === 'red' ? 'Red' : 'Yellow'}</span>
               </span>
             </div>
           </div>

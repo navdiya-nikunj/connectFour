@@ -200,6 +200,17 @@ export async function saveGameHistory(gameHistory: Omit<IGameHistory, '_id' | 'c
   return savedHistory.toObject();
 }
 
+export async function getGameHistoryById(gameId: string): Promise<IGameHistory | null> {
+  await dbConnect();
+  try {
+    const game = await GameHistory.findById(gameId).lean();
+    return (game as any) ?? null;
+  } catch {
+    // Invalid ObjectId or other error
+    return null;
+  }
+}
+
 export async function getGameHistoryByUser(fid: number, limit = 10): Promise<IGameHistory[]> {
   await dbConnect();
   

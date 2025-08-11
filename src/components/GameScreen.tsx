@@ -29,7 +29,8 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
   const [gameStartTime, setGameStartTime] = useState<Date>(new Date());
   const [moves, setMoves] = useState<Array<{ column: number; player: 'red' | 'yellow'; timestamp: Date }>>([]);
   const [currentUser, setCurrentUser] = useState<FarcasterUser | null>(null);
-
+  const [gameId, setGameId] = useState<string | null>(null);
+  
   // Get current user on component mount
   useEffect(() => {
     const getCurrentUser = async () => {
@@ -177,7 +178,8 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
 
       if (response.ok) {
         console.log('Game history saved successfully');
-        
+        const data = await response.json();
+        setGameId(data._id);
         // Update streak for the current user if they won
         if (finalGameState.gameStatus === 'won' && finalGameState.winner === 'red') {
           await updateStreakAfterGame(true);
@@ -195,12 +197,15 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
   };
 
   const handleShareResult = () => {
-    const gameUrl = window.location.href || 'https://connect-four-hazel.vercel.app';
+    let gameUrl = window.location.href || 'https://connect-four-hazel.vercel.app';
     let castText = '';
     
     if (gameState.gameStatus === 'won') {
       const winner = gameState.winner === 'red' ? 'Red' : 'Yellow';
       if (gameMode === 'ai') {
+        if (gameId) {
+          gameUrl = `${gameUrl}/game/${gameId}`;
+        }
         castText = gameState.winner !== 'red'
           ?  `🤖 The AI just destroyed me in Connect Four. Maybe I'll try one more time. 🤦‍♂️\n\nPlay now: ${gameUrl}`
           :   `🤖 I just outsmarted the AI in Connect Four. Somewhere, a robot is crying. Bow before your new digital overlord! 🏆\n\nPlay now: ${gameUrl}`;

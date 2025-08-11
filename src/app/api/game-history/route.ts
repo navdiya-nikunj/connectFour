@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       await updateStreakAfterGame(yellowPlayerFid, yellowPlayerWon);
     }
 
-    return NextResponse.json({ gameHistory });
+    return NextResponse.json({ gameHistory, _id: gameHistory._id });
   } catch (error) {
     console.error('Error saving game history:', error);
     return NextResponse.json(
