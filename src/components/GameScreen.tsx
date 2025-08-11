@@ -207,13 +207,13 @@ export default function GameScreen({ gameMode, aiDifficulty, onBackToSetup, onBa
       const winner = gameState.winner === 'red' ? 'Red' : 'Yellow';
       if (gameMode === 'ai') {
         if (gameId) {
-          gameUrl = `${gameUrl}/game/${gameId}`;
+          gameUrl = `${gameUrl}game/${gameId}`;
         }
         castText = gameState.winner !== 'red'
-          ?  `🤖 The AI just destroyed me in Connect Four. Maybe I'll try one more time. 🤦‍♂️\n\nPlay now: ${gameUrl}`
-          :   `🤖 I just outsmarted the AI in Connect Four. Somewhere, a robot is crying. Bow before your new digital overlord! 🏆\n\nPlay now: ${gameUrl}`;
+          ?  `🤖 The AI just destroyed me in Connect Four. Maybe I'll try one more time. 🤦‍♂️\n\nPlay now:`
+          :   `🤖 I just outsmarted the AI in Connect Four. Somewhere, a robot is crying. Bow before your new digital overlord! 🏆\n\nPlay now:`;
       } else {
-        castText = `🎮 Just won a game of Connect Four on Farcaster! ${winner} player took the victory! 🏆\n\nPlay now: ${gameUrl}`;
+        castText = `🎮 Just won a game of Connect Four on Farcaster! ${winner} player took the victory! 🏆\n\nPlay now: `;
       }
     } else if (gameState.gameStatus === 'draw') {
       castText = `🎮 Just played Connect Four on Farcaster! It was a thrilling draw! 🤝\n\nPlay now: ${gameUrl}`;

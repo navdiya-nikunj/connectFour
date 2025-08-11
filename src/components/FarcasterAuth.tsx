@@ -42,6 +42,8 @@ export default function FarcasterAuth({ onUserChange, currentUser }: FarcasterAu
             setUser(userData);
             onUserChange(userData);
           }
+        }else{
+          handleConnect();
         }
       } catch (error) {
         console.error('Error checking auth status:', error);

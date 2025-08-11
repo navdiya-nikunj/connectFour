@@ -138,6 +138,7 @@ export async function GET(request: Request) {
       (
         <div style={{
           width: '80%',
+          margin: 'auto',
           height: '630px',
           background: '#ffffff',
           display: 'flex',
